@@ -77,6 +77,18 @@ header{height:var(--hh);background:#fff;border-bottom:3px solid var(--blue);disp
 .model-btn{padding:8px 10px;border:1px solid var(--brd);border-radius:6px;background:var(--bg);cursor:pointer;font-size:12.5px;font-weight:600;color:var(--txt);text-align:center;width:100%;transition:all .15s;}
 .model-btn:hover{background:#ebebeb;border-color:#bbb;}
 .model-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.model-btn.custom{margin-top:8px;border-style:dashed;}
+/* CUSTOM-COMPRESSOR PANEL — appears under the Custom button when selected */
+.custom-flow-panel{margin-top:6px;padding:10px;background:#f4f6fa;border:1px solid #e4e8f0;border-radius:6px;display:flex;flex-direction:column;gap:6px;}
+.custom-flow-panel label{font-size:9px;font-weight:700;color:var(--mut);letter-spacing:.6px;text-transform:uppercase;}
+.custom-flow-panel .row{display:flex;gap:6px;align-items:stretch;}
+.custom-flow-panel input{flex:1;min-width:0;padding:7px 8px;border:1.5px solid var(--brd);border-radius:5px;font-size:13px;font-weight:700;color:var(--txt);background:#fff;}
+.custom-flow-panel input:focus{outline:none;border-color:var(--blue);}
+.custom-flow-panel select{padding:6px 4px;border:1.5px solid var(--brd);border-radius:5px;font-size:11px;font-weight:600;background:#fff;cursor:pointer;color:var(--txt);}
+.custom-flow-panel select:focus{outline:none;border-color:var(--blue);}
+/* Cartridge view: notice shown when Custom compressor is selected (no cartridge data exists for non-Nardi models) */
+.chart-custom-msg{display:none;flex:1;align-items:center;justify-content:center;padding:24px;text-align:center;color:var(--mut);font-size:13px;font-weight:600;line-height:1.5;}
+.chart-custom-msg.show{display:flex;}
 
 /* ── VIEWS ── */
 .view{display:none;flex:1;overflow:hidden;padding:10px;min-width:0;}
@@ -410,7 +422,7 @@ header{height:var(--hh);background:#fff;border-bottom:3px solid var(--blue);disp
 .bl-field input,.bl-field select{padding:8px 10px;border:1.5px solid var(--brd);border-radius:6px;font-size:13px;font-weight:600;color:var(--txt);background:#fff;transition:border-color .15s;width:100%;}
 .bl-field input:focus,.bl-field select:focus{outline:none;border-color:var(--blue);}
 .bl-mix-grp{background:#f4f6fa;border:1px solid #e4e8f0;border-radius:8px;padding:10px 12px;flex:1;min-width:240px;}
-.bl-mix-grp .bl-mix-title{font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.bl-mix-grp .bl-mix-title{font-size:14px;font-weight:800;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
 .bl-mix-row{display:flex;gap:10px;}
 .bl-n2-tag{font-size:11px;color:var(--mut);font-weight:600;margin-top:6px;}
 .bl-n2-tag b{color:var(--txt);font-weight:800;}
@@ -466,11 +478,17 @@ header{height:var(--hh);background:#fff;border-bottom:3px solid var(--blue);disp
 .bl-inline-density.warn .bl-inline-density-val{color:#E65100;}
 .bl-inline-density.danger .bl-inline-density-val{color:#c62828;}
 .bl-mod-table{margin-top:10px;background:#fff;border:1px solid #e0e4ec;border-radius:6px;overflow:hidden;}
-.bl-mod-table table{width:100%;border-collapse:collapse;font-size:11.5px;}
-.bl-mod-table th{background:#f0f4f9;font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);padding:6px 8px;text-align:right;}
-.bl-mod-table th:first-child{text-align:left;}
-.bl-mod-table td{padding:5px 8px;border-top:1px solid #eef1f5;text-align:right;font-variant-numeric:tabular-nums;color:var(--txt);}
-.bl-mod-table td:first-child{text-align:left;font-weight:600;color:var(--mut);}
+.bl-mod-table table{width:100%;border-collapse:collapse;font-size:11.5px;table-layout:fixed;}
+.bl-mod-table col.bl-c-pp,.bl-mod-table col.bl-c-mod,.bl-mod-table col.bl-c-end,.bl-mod-table col.bl-c-dens{width:25%;}
+.bl-mod-table th{background:#f0f4f9;font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);padding:6px 8px;text-align:center;}
+.bl-mod-table th:first-child{text-align:center;}
+.bl-mod-table td{padding:5px 8px;border-top:1px solid #eef1f5;text-align:center;font-variant-numeric:tabular-nums;color:var(--txt);}
+.bl-mod-table td:first-child{text-align:center;font-weight:600;color:var(--mut);}
+.bl-mod-table td.bl-cell-end-warn{color:#FB8C00;font-weight:800;}
+.bl-mod-table td.bl-cell-end-ok{color:#2e7d32;font-weight:800;}
+.bl-mod-table td.bl-cell-dens-danger{color:#c62828;font-weight:800;}
+.bl-mod-table td.bl-cell-dens-warn{color:#FB8C00;font-weight:800;}
+.bl-mod-table td.bl-cell-dens-ok{color:#2e7d32;font-weight:800;}
 .bl-mod-end{font-size:11.5px;color:var(--txt);margin-top:8px;display:flex;gap:14px;flex-wrap:wrap;}
 .bl-mod-end b{color:var(--blue);font-weight:800;}
 /* END table reuses .bl-mod-table look but with an amber accent so it's distinguishable from the MOD/ppO₂ table above */
@@ -628,6 +646,7 @@ header{height:var(--hh);background:#fff;border-bottom:3px solid var(--blue);disp
         <canvas id="mainChart"></canvas>
         <button class="zoom-reset" id="zoomReset" onclick="resetZoom()">↺ Reset zoom</button>
         <div class="zoom-hint" id="zoomHint">🔍 Drag to select a temperature range to zoom</div>
+        <div class="chart-custom-msg" id="chartCustomMsg">📊 Cartridge lifetime data is only available for Nardi compressors. Pick a model from the sidebar to see the chart.</div>
       </div>
     </div>
     <div class="sum-row" id="sumRow"></div>
@@ -695,6 +714,7 @@ header{height:var(--hh);background:#fff;border-bottom:3px solid var(--blue);disp
             <tr>
               <th data-i18n="colModel">Model</th>
               <th id="colFlowHdr">Flow [L/min]</th>
+              <th id="colFlowHrHdr">Flow [m³/h]</th>
               <th data-i18n="colFillTime">Fill Time</th>
               <th data-i18n="colCylHour">Cyl./hour</th>
             </tr>
@@ -774,112 +794,128 @@ const LANG={
     chiller:'+ Nardi Chiller',hours:'h',at:'at',
     ambTemp:'Ambient Temperature',yLbl:'Life',
     chartTpl:'{model} – Filter Cartridge Life at {prs}',
+    customCompressor:'Custom compressor',customFlow:'Flow rate',cartridgeNotAvailable:'📊 Cartridge lifetime data is only available for Nardi compressors. Pick a model from the sidebar to see the chart.',
     tabCartridge:'Cartridge Lifetime',tabFilling:'Filling Time',tabCascade:'Cascade Calculator',cascadeComingSoon:'Coming soon…',labelCyl:'Cylinder',cascConfig:'Cascade Configuration',cascBanks:'Number of banks',cascBankVol:'Volume each',cascBankMaxP:'Charge pressure',cascBank:'Bank',cascInitial:'Initial state',cascCylinder:'Cylinder',cascReached:'Reached',cascTopUp:'Compressor needed',cascFillable:'Fillable from here',cascRecharge:'Cascade recharge',cascAfterTransfer:'After cascade transfer',cascVolErr:'⚠ Volume must be > 0 L',genPressErr:'⚠ Pressure cannot be negative',genVolErr:'⚠ Volume must be greater than 0',cascReset:'Reset',cascCompCylFill:'Compressor cylinder top-up',cascAddCyl:'Add cylinder to fill',tabBlends:'Blending Calculator',blendsTitle:'Nitrox/Trimix Blending Calculator',blendsInputs:'Inputs',blendsCylVol:'Cylinder volume',blendsCyl:'Cylinder',blendsPini:'Initial pressure',blendsPfin:'Final pressure',blendsInitMix:'Initial mix in cylinder',blendsFinalMix:'Desired final mix',blendsO2:'% Oxygen',blendsHe:'% Helium',blendsN2:'Nitrogen (calc.)',blendsMethod1:'Partial Pressure Method',blendsMethod2:'Continuous Blending (Stick)',blendsMethod2Desc:'Mix continuously through a blending stick with two O₂ sensors',blendsAddO2:'Oxygen to add',blendsAddHe:'Helium to add',blendsAddAir:'Air from compressor',blendsTopUp:'Top-up to final pressure',blendsImpossible:'⚠ Mix not feasible — please check parameters (initial mix richer than final, or pressures invalid).',blendsSensor1:'Sensor 1 reading (after Helium added)',blendsSensor2:'Sensor 2 reading (after Oxygen added)',blendsSensorNote:'Air enters between sensor 2 and the cylinder',blendsTTMix:'TT-Mix Pro — Automatic Nitrox/Trimix blending',blendsTTMixDesc:'Discover Nardi\'s complete solution for precise, fully automatic gas blending.',blendsNitroxGen:'Nitrox in-house production',blendsNitroxGenDesc:'Nardi compressors and Nitrox generators — produce your own breathing mixes on site.',blendsLearnMore:'Learn more →',blendsResults:'Results',blendsPctErr:'⚠ O₂ + He must be ≤ 100%',
     labelPini:'Initial Pressure',labelPfin:'Final Pressure',labelVhyd:'Hydraulic Volume',
     hydNote:'The hydraulic volume is the capacity of the cylinder if completely filled with water — not the volume of compressed air it contains.',
     colModel:'Model',colFillTime:'Fill Time',colCylHour:'Cyl. / hour',
     colFlow:'Flow',min:'min',sec:'sec',
-    reset:'↺ Reset zoom',zoomHint:'🔍 Drag to select a temperature range to zoom',bannerChillerTitle:'Nardi HP Chiller – Refrigerated Dryer',bannerChillerDesc:'Cool the inlet air and multiply your cartridge lifetime.',bannerBreathAirTitle:'Nardi Breathing Air Systems',bannerBreathAirDesc:'Discover the full range of high-pressure breathing-air compressors.',bannerBypassTitle:'Nardi Automatic Selector By-Pass',bannerBypassDesc:'Automatic cascade switching for continuous, hands-free filling.',bannerLearnMore:'Learn more →',blendsReset:'↺ Reset',blendsPurityTitle:'Purity of bank gases',blendsPurityO2:'Available O₂ purity',blendsPurityHe:'Available He purity',blendsFinalType:'Mix mode',blendsCustomMix:'Custom Mix',blendsBestMix:'Best Mix',blendsMaxDepth:'Max depth',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Calculated best mix',blendsDensity:'Gas density at max depth',blendsDrainTitle:'Suggested fix',blendsDrainSugg:'Drain {bars} from the cylinder (down to {pTo}) before mixing — the requested mix is not achievable from the current state.',blendsDrainImpossible:'Even fully empty, the requested mix cannot be reached from the current bank gases. Adjust the requested mix or use richer source gases.',blendsFillTime:'≈ {time} of compressor run-time ({model})',blendsTopUpTime:'≈ {time} of compressor run-time to top up ({model})',blendsBestMixHint:'Best mix at {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ At this depth, requested ppO₂ requires fO₂ outside 0–100%. Adjust depth or ppO₂.',blendsBestMixHeNeeded:'⚠ END unreachable without negative helium — try shallower END or lower ppO₂.',blendsCmpStep:'Step',blendsCmpRead:'Pressure to read on the gauge',blendsCmpReadStick:'Read on stick'},
+    reset:'↺ Reset zoom',zoomHint:'🔍 Drag to select a temperature range to zoom',bannerChillerTitle:'Nardi HP Chiller – Refrigerated Dryer',bannerChillerDesc:'Cool the inlet air and multiply your cartridge lifetime.',bannerBreathAirTitle:'Nardi Breathing Air Systems',bannerBreathAirDesc:'Discover the full range of high-pressure breathing-air compressors.',bannerBypassTitle:'Nardi Automatic Selector By-Pass',bannerBypassDesc:'Automatic cascade switching for continuous, hands-free filling.',bannerLearnMore:'Learn more →',blendsReset:'↺ Reset',blendsPurityTitle:'Purity of bank gases',blendsPurityO2:'Available O₂ purity',blendsPurityHe:'Available He purity',blendsFinalType:'Mix mode',blendsCustomMix:'Custom Mix',blendsBestMix:'Best Mix',blendsMaxDepth:'Max depth',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Calculated best mix',blendsDensity:'Gas density at max depth',blendsDensityCol:'Density',blendsDrainTitle:'Suggested fix',blendsDrainSugg:'Drain {bars} from the cylinder (down to {pTo}) before mixing — the requested mix is not achievable from the current state.',blendsDrainImpossible:'Even fully empty, the requested mix cannot be reached from the current bank gases. Adjust the requested mix or use richer source gases.',blendsFillTime:'≈ {time} of compressor run-time ({model})',blendsTopUpTime:'≈ {time} of compressor run-time to top up ({model})',blendsBestMixHint:'Best mix at {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ At this depth, requested ppO₂ requires fO₂ outside 0–100%. Adjust depth or ppO₂.',blendsBestMixHeNeeded:'⚠ END unreachable without negative helium — try shallower END or lower ppO₂.',blendsCmpStep:'Step',blendsCmpRead:'Pressure to read on the gauge',blendsCmpReadStick:'Read on stick'},
   it:{flag:'🇮🇹',name:'Italiano',rtl:false,
     metric:'METRICO',imperial:'IMPERIALE',
     pressure:'Pressione di lavoro',model:'Modello compressore',filters:'Filtri:',
     chiller:'+ Nardi Chiller',hours:'h',at:'a',
     ambTemp:'Temperatura Ambiente',yLbl:'Durata',
     chartTpl:'Durata Cartuccia {model} a {prs}',
+    customCompressor:'Compressore personalizzato',customFlow:'Portata',cartridgeNotAvailable:'📊 I dati di durata cartuccia sono disponibili solo per i compressori Nardi. Seleziona un modello nella barra laterale per vedere il grafico.',
     tabCartridge:'Durata Cartuccia',tabFilling:'Tempo Ricarica',tabCascade:'Calcolo Travaso',cascadeComingSoon:'Prossimamente…',labelCyl:'Bombola',cascConfig:'Configurazione a Cascata',cascBanks:'N° bombole',cascBankVol:'Volume ciascuna',cascBankMaxP:'Pressione di ricarica',cascBank:'Bombola',cascInitial:'Stato iniziale',cascCylinder:'Bombola da riempire',cascReached:'Pressione raggiunta',cascTopUp:'Integrazione compressore',cascFillable:'Riempibili da qui',cascRecharge:'Ricarica a cascata',cascAfterTransfer:'Dopo travaso a cascata',cascVolErr:'⚠ Il volume deve essere > 0 L',genPressErr:'⚠ La pressione non può essere negativa',genVolErr:'⚠ Il volume deve essere maggiore di 0',cascReset:'Reset',cascCompCylFill:'Integrazione bombole con compressore',cascAddCyl:'Aggiungi bombola',tabBlends:'Calcolo Miscele',blendsTitle:'Calcolatore di miscele Nitrox/Trimix',blendsInputs:'Parametri',blendsCylVol:'Volume bombola',blendsCyl:'Bombola',blendsPini:'Pressione iniziale',blendsPfin:'Pressione finale',blendsInitMix:'Miscela iniziale in bombola',blendsFinalMix:'Miscela finale desiderata',blendsO2:'% Ossigeno',blendsHe:'% Elio',blendsN2:'Azoto (calc.)',blendsMethod1:'Metodo a pressioni parziali',blendsMethod2:'Miscelazione con Stick',blendsMethod2Desc:'Miscelazione continua tramite stick con due sensori O₂',blendsAddO2:'Ossigeno da caricare',blendsAddHe:'Elio da caricare',blendsAddAir:'Aria dal compressore',blendsTopUp:'Rabbocco a pressione finale',blendsImpossible:'⚠ Miscela impossibile — controlla i parametri (miscela iniziale più ricca della finale, o pressioni non valide).',blendsSensor1:'Lettura sensore 1 (dopo aggiunta Elio)',blendsSensor2:'Lettura sensore 2 (dopo aggiunta Ossigeno)',blendsSensorNote:'L\'aria entra tra il sensore 2 e la bombola',blendsTTMix:'TT-Mix Pro — Miscelazione automatica Nitrox/Trimix',blendsTTMixDesc:'Scopri la soluzione completa Nardi per miscelare in modo preciso e completamente automatico.',blendsNitroxGen:'Autoproduzione Nitrox',blendsNitroxGenDesc:'Compressori e generatori Nitrox Nardi — produci in autonomia le tue miscele respirabili in sede.',blendsLearnMore:'Scopri di più →',blendsResults:'Risultati',blendsPctErr:'⚠ O₂ + He devono essere ≤ 100%',
     labelPini:'Pressione Iniziale',labelPfin:'Pressione Finale',labelVhyd:'Volume Idraulico',
     hydNote:'Il volume idraulico è la capacità della bombola se venisse riempita completamente con acqua — non il volume dell\'aria compressa contenuta.',
     colModel:'Modello',colFillTime:'Tempo Ricarica',colCylHour:'Bombole / ora',
     colFlow:'Portata',min:'min',sec:'sec',
-    reset:'↺ Reset zoom',zoomHint:'🔍 Trascina per selezionare un intervallo di temperatura',bannerChillerTitle:'Nardi HP Chiller – Essiccatore Refrigerato',bannerChillerDesc:'Raffredda l\'aria in ingresso e moltiplica la durata delle cartucce.',bannerBreathAirTitle:'Sistemi Aria Respirabile Nardi',bannerBreathAirDesc:'Scopri tutta la gamma di compressori HP per aria respirabile.',bannerBypassTitle:'Selettore Automatico By-Pass Nardi',bannerBypassDesc:'Commutazione automatica della cascata per ricariche continue senza intervento manuale.',bannerLearnMore:'Scopri di più →',blendsReset:'↺ Reset',blendsPurityTitle:'Purezza dei gas dalle bombole bank',blendsPurityO2:'Purezza O₂ disponibile',blendsPurityHe:'Purezza He disponibile',blendsFinalType:'Modalità miscela',blendsCustomMix:'Mix personalizzato',blendsBestMix:'Best Mix',blendsMaxDepth:'Profondità max',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Best mix calcolato',blendsDensity:'Densità miscela alla profondità max',blendsDrainTitle:'Soluzione consigliata',blendsDrainSugg:'Svuota la bombola di {bars} (fino a {pTo}) prima di miscelare — la miscela richiesta non è ottenibile dallo stato attuale.',blendsDrainImpossible:'Anche completamente vuota, la miscela richiesta non è raggiungibile con i gas bank attuali. Modifica la miscela richiesta o usa gas più ricchi.',blendsFillTime:'≈ {time} di funzionamento compressore ({model})',blendsTopUpTime:'≈ {time} di funzionamento compressore per il rabbocco ({model})',blendsBestMixHint:'Best mix a {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ A questa profondità la ppO₂ richiesta porta fO₂ fuori dall\'intervallo 0–100%. Modifica profondità o ppO₂.',blendsBestMixHeNeeded:'⚠ END non raggiungibile senza elio negativo — prova una END più alta o ppO₂ più bassa.',blendsCmpStep:'Step',blendsCmpRead:'Pressione da leggere sul manometro',blendsCmpReadStick:'Lettura sullo stick'},
+    reset:'↺ Reset zoom',zoomHint:'🔍 Trascina per selezionare un intervallo di temperatura',bannerChillerTitle:'Nardi HP Chiller – Essiccatore Refrigerato',bannerChillerDesc:'Raffredda l\'aria in ingresso e moltiplica la durata delle cartucce.',bannerBreathAirTitle:'Sistemi Aria Respirabile Nardi',bannerBreathAirDesc:'Scopri tutta la gamma di compressori HP per aria respirabile.',bannerBypassTitle:'Selettore Automatico By-Pass Nardi',bannerBypassDesc:'Commutazione automatica della cascata per ricariche continue senza intervento manuale.',bannerLearnMore:'Scopri di più →',blendsReset:'↺ Reset',blendsPurityTitle:'Purezza dei gas dalle bombole bank',blendsPurityO2:'Purezza O₂ disponibile',blendsPurityHe:'Purezza He disponibile',blendsFinalType:'Modalità miscela',blendsCustomMix:'Mix personalizzato',blendsBestMix:'Best Mix',blendsMaxDepth:'Profondità max',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Best mix calcolato',blendsDensity:'Densità miscela alla profondità max',blendsDensityCol:'Densità',blendsDrainTitle:'Soluzione consigliata',blendsDrainSugg:'Svuota la bombola di {bars} (fino a {pTo}) prima di miscelare — la miscela richiesta non è ottenibile dallo stato attuale.',blendsDrainImpossible:'Anche completamente vuota, la miscela richiesta non è raggiungibile con i gas bank attuali. Modifica la miscela richiesta o usa gas più ricchi.',blendsFillTime:'≈ {time} di funzionamento compressore ({model})',blendsTopUpTime:'≈ {time} di funzionamento compressore per il rabbocco ({model})',blendsBestMixHint:'Best mix a {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ A questa profondità la ppO₂ richiesta porta fO₂ fuori dall\'intervallo 0–100%. Modifica profondità o ppO₂.',blendsBestMixHeNeeded:'⚠ END non raggiungibile senza elio negativo — prova una END più alta o ppO₂ più bassa.',blendsCmpStep:'Step',blendsCmpRead:'Pressione da leggere sul manometro',blendsCmpReadStick:'Lettura sullo stick'},
   fr:{flag:'🇫🇷',name:'Français',rtl:false,
     metric:'MÉTRIQUE',imperial:'IMPÉRIAL',
     pressure:'Pression de travail',model:'Modèle compresseur',filters:'Filtres:',
     chiller:'+ Nardi Chiller',hours:'h',at:'à',
     ambTemp:'Température Ambiante',yLbl:'Durée',
     chartTpl:'Durée cartouche {model} à {prs}',
+    customCompressor:'Compresseur personnalisé',customFlow:'Débit',cartridgeNotAvailable:'📊 Les données de durée de cartouche ne sont disponibles que pour les compresseurs Nardi. Choisissez un modèle dans la barre latérale pour afficher le graphique.',
     tabCartridge:'Durée Cartouche',tabFilling:'Temps de Remplissage',tabCascade:'Calculateur Cascade',cascadeComingSoon:'Prochainement…',labelCyl:'Bouteille',cascConfig:'Configuration Cascade',cascBanks:'Nb. bouteilles',cascBankVol:'Volume chacune',cascBankMaxP:'Pression de charge',cascBank:'Bouteille',cascInitial:'État initial',cascCylinder:'Bouteille à remplir',cascReached:'Pression atteinte',cascTopUp:'Appoint compresseur',cascFillable:'Remplissables d\'ici',cascRecharge:'Recharge cascade',cascAfterTransfer:'Après transfert cascade',cascVolErr:'⚠ Le volume doit être > 0 L',genPressErr:'⚠ La pression ne peut pas être négative',genVolErr:'⚠ Le volume doit être supérieur à 0',cascReset:'Reset',cascCompCylFill:'Appoint bouteilles compresseur',cascAddCyl:'Ajouter bouteille',tabBlends:'Calculateur de Mélanges',blendsTitle:'Calculateur de mélanges Nitrox/Trimix',blendsInputs:'Paramètres',blendsCylVol:'Volume bouteille',blendsCyl:'Bouteille',blendsPini:'Pression initiale',blendsPfin:'Pression finale',blendsInitMix:'Mélange initial dans la bouteille',blendsFinalMix:'Mélange final souhaité',blendsO2:'% Oxygène',blendsHe:'% Hélium',blendsN2:'Azote (calc.)',blendsMethod1:'Méthode des pressions partielles',blendsMethod2:'Mélange continu (Stick)',blendsMethod2Desc:'Mélange continu par stick avec deux capteurs O₂',blendsAddO2:'Oxygène à charger',blendsAddHe:'Hélium à charger',blendsAddAir:'Air du compresseur',blendsTopUp:'Complément à pression finale',blendsImpossible:'⚠ Mélange impossible — vérifiez les paramètres (mélange initial plus riche que le final, ou pressions invalides).',blendsSensor1:'Lecture capteur 1 (après ajout Hélium)',blendsSensor2:'Lecture capteur 2 (après ajout Oxygène)',blendsSensorNote:'L\'air entre entre le capteur 2 et la bouteille',blendsTTMix:'TT-Mix Pro — Mélange automatique Nitrox/Trimix',blendsTTMixDesc:'Découvrez la solution complète Nardi pour un mélange précis et entièrement automatique.',blendsNitroxGen:'Auto-production Nitrox',blendsNitroxGenDesc:'Compresseurs et générateurs Nitrox Nardi — produisez vos propres mélanges sur site.',blendsLearnMore:'En savoir plus →',blendsResults:'Résultats',blendsPctErr:'⚠ O₂ + He doivent être ≤ 100%',
     labelPini:'Pression Initiale',labelPfin:'Pression Finale',labelVhyd:'Volume Hydraulique',
     hydNote:'Le volume hydraulique est la capacité du cylindre s\'il était entièrement rempli d\'eau — pas le volume d\'air comprimé qu\'il contient.',
     colModel:'Modèle',colFillTime:'Temps Remplissage',colCylHour:'Cyl. / heure',
     colFlow:'Débit',min:'min',sec:'sec',
-    reset:'↺ Réinitialiser',zoomHint:'🔍 Glisser pour sélectionner une plage de température',bannerChillerTitle:'Nardi HP Chiller – Sécheur Frigorifique',bannerChillerDesc:'Refroidissez l\'air d\'entrée et multipliez la durée des cartouches.',bannerBreathAirTitle:'Systèmes Air Respirable Nardi',bannerBreathAirDesc:'Découvrez toute la gamme de compresseurs HP air respirable.',bannerBypassTitle:'Sélecteur Automatique By-Pass Nardi',bannerBypassDesc:'Commutation cascade automatique pour des remplissages continus sans intervention.',bannerLearnMore:'En savoir plus →',blendsReset:'↺ Reset',blendsPurityTitle:'Pureté des gaz bouteilles bank',blendsPurityO2:'Pureté O₂ disponible',blendsPurityHe:'Pureté He disponible',blendsFinalType:'Mode mélange',blendsCustomMix:'Mélange Personnalisé',blendsBestMix:'Best Mix',blendsMaxDepth:'Profondeur max',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Best mix calculé',blendsDensity:'Densité gaz à la profondeur max',blendsDrainTitle:'Solution suggérée',blendsDrainSugg:'Videz la bouteille de {bars} (jusqu\'à {pTo}) avant de mélanger — le mélange demandé n\'est pas réalisable depuis l\'état actuel.',blendsDrainImpossible:'Même complètement vide, le mélange demandé n\'est pas réalisable avec les gaz bank actuels. Modifiez le mélange ou utilisez des gaz plus riches.',blendsFillTime:'≈ {time} de fonctionnement compresseur ({model})',blendsTopUpTime:'≈ {time} de fonctionnement compresseur pour le complément ({model})',blendsBestMixHint:'Best mix à {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ À cette profondeur, ppO₂ demandée donne fO₂ hors 0–100%. Ajustez profondeur ou ppO₂.',blendsBestMixHeNeeded:'⚠ END non atteignable sans hélium négatif — essayez une END plus haute ou ppO₂ plus basse.',blendsCmpStep:'Étape',blendsCmpRead:'Pression à lire sur le manomètre',blendsCmpReadStick:'Lecture sur le stick'},
+    reset:'↺ Réinitialiser',zoomHint:'🔍 Glisser pour sélectionner une plage de température',bannerChillerTitle:'Nardi HP Chiller – Sécheur Frigorifique',bannerChillerDesc:'Refroidissez l\'air d\'entrée et multipliez la durée des cartouches.',bannerBreathAirTitle:'Systèmes Air Respirable Nardi',bannerBreathAirDesc:'Découvrez toute la gamme de compresseurs HP air respirable.',bannerBypassTitle:'Sélecteur Automatique By-Pass Nardi',bannerBypassDesc:'Commutation cascade automatique pour des remplissages continus sans intervention.',bannerLearnMore:'En savoir plus →',blendsReset:'↺ Reset',blendsPurityTitle:'Pureté des gaz bouteilles bank',blendsPurityO2:'Pureté O₂ disponible',blendsPurityHe:'Pureté He disponible',blendsFinalType:'Mode mélange',blendsCustomMix:'Mélange Personnalisé',blendsBestMix:'Best Mix',blendsMaxDepth:'Profondeur max',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Best mix calculé',blendsDensity:'Densité gaz à la profondeur max',blendsDensityCol:'Densité',blendsDrainTitle:'Solution suggérée',blendsDrainSugg:'Videz la bouteille de {bars} (jusqu\'à {pTo}) avant de mélanger — le mélange demandé n\'est pas réalisable depuis l\'état actuel.',blendsDrainImpossible:'Même complètement vide, le mélange demandé n\'est pas réalisable avec les gaz bank actuels. Modifiez le mélange ou utilisez des gaz plus riches.',blendsFillTime:'≈ {time} de fonctionnement compresseur ({model})',blendsTopUpTime:'≈ {time} de fonctionnement compresseur pour le complément ({model})',blendsBestMixHint:'Best mix à {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ À cette profondeur, ppO₂ demandée donne fO₂ hors 0–100%. Ajustez profondeur ou ppO₂.',blendsBestMixHeNeeded:'⚠ END non atteignable sans hélium négatif — essayez une END plus haute ou ppO₂ plus basse.',blendsCmpStep:'Étape',blendsCmpRead:'Pression à lire sur le manomètre',blendsCmpReadStick:'Lecture sur le stick'},
   de:{flag:'🇩🇪',name:'Deutsch',rtl:false,
     metric:'METRISCH',imperial:'IMPERIAL',
     pressure:'Betriebsdruck',model:'Kompressormodell',filters:'Filter:',
     chiller:'+ Nardi Chiller',hours:'Std',at:'bei',
     ambTemp:'Umgebungstemperatur',yLbl:'Lebensdauer',
     chartTpl:'Filterkartusche {model} bei {prs}',
+    customCompressor:'Eigener Kompressor',customFlow:'Förderleistung',cartridgeNotAvailable:'📊 Daten zur Filterkartuschen-Lebensdauer sind nur für Nardi-Kompressoren verfügbar. Wählen Sie ein Modell in der Seitenleiste, um das Diagramm zu sehen.',
     tabCartridge:'Filterkartusche',tabFilling:'Füllzeit',tabCascade:'Kaskaden-Rechner',cascadeComingSoon:'Demnächst…',labelCyl:'Flasche',cascConfig:'Kaskaden-Konfiguration',cascBanks:'Anzahl Flaschen',cascBankVol:'Volumen je',cascBankMaxP:'Ladefülldruck',cascBank:'Flasche',cascInitial:'Ausgangszustand',cascCylinder:'Zu füllende Flasche',cascReached:'Erreichter Druck',cascTopUp:'Kompressor-Nachfüllung',cascFillable:'Befüllbar von hier',cascRecharge:'Kaskaden-Nachladung',cascAfterTransfer:'Nach Kaskaden-Transfer',cascVolErr:'⚠ Volumen muss > 0 L sein',genPressErr:'⚠ Druck darf nicht negativ sein',genVolErr:'⚠ Volumen muss größer als 0 sein',cascReset:'Reset',cascCompCylFill:'Kompressor-Flaschennachfüllung',cascAddCyl:'Flasche hinzufügen',tabBlends:'Gemisch-Rechner',blendsTitle:'Nitrox/Trimix Gemisch-Rechner',blendsInputs:'Parameter',blendsCylVol:'Flaschenvolumen',blendsCyl:'Flasche',blendsPini:'Anfangsdruck',blendsPfin:'Enddruck',blendsInitMix:'Anfangsgemisch in der Flasche',blendsFinalMix:'Gewünschtes Endgemisch',blendsO2:'% Sauerstoff',blendsHe:'% Helium',blendsN2:'Stickstoff (ber.)',blendsMethod1:'Partialdruck-Methode',blendsMethod2:'Kontinuierliches Mischen (Stick)',blendsMethod2Desc:'Kontinuierliches Mischen über Stick mit zwei O₂-Sensoren',blendsAddO2:'Sauerstoff zugeben',blendsAddHe:'Helium zugeben',blendsAddAir:'Luft vom Kompressor',blendsTopUp:'Auf Enddruck auffüllen',blendsImpossible:'⚠ Gemisch nicht möglich — Parameter prüfen (Anfangsgemisch reicher als Endgemisch oder ungültige Drücke).',blendsSensor1:'Sensor-1-Anzeige (nach Helium-Zugabe)',blendsSensor2:'Sensor-2-Anzeige (nach Sauerstoff-Zugabe)',blendsSensorNote:'Luft wird zwischen Sensor 2 und Flasche zugeführt',blendsTTMix:'TT-Mix Pro — Automatische Nitrox/Trimix-Mischung',blendsTTMixDesc:'Entdecken Sie die Komplettlösung von Nardi für präzises, vollautomatisches Mischen.',blendsNitroxGen:'Nitrox-Eigenproduktion',blendsNitroxGenDesc:'Nardi-Kompressoren und Nitrox-Generatoren — produzieren Sie Ihre Atemgemische selbst vor Ort.',blendsLearnMore:'Mehr erfahren →',blendsResults:'Ergebnisse',blendsPctErr:'⚠ O₂ + He müssen ≤ 100% sein',
     labelPini:'Anfangsdruck',labelPfin:'Enddruck',labelVhyd:'Hydraulisches Volumen',
     hydNote:'Das hydraulische Volumen ist die Kapazität des Zylinders wenn er vollständig mit Wasser gefüllt wäre — nicht das Volumen der enthaltenen Druckluft.',
     colModel:'Modell',colFillTime:'Füllzeit',colCylHour:'Fl. / Stunde',
     colFlow:'Durchfluss',min:'Min',sec:'Sek',
-    reset:'↺ Zoom zurücksetzen',zoomHint:'🔍 Ziehen um Temperaturbereich auszuwählen',bannerChillerTitle:'Nardi HP Chiller – Kältetrockner',bannerChillerDesc:'Eingangsluft kühlen und Standzeit der Patronen vervielfachen.',bannerBreathAirTitle:'Nardi Atemluft-Systeme',bannerBreathAirDesc:'Entdecken Sie das gesamte HP-Atemluftkompressoren-Programm.',bannerBypassTitle:'Nardi Automatischer By-Pass-Selektor',bannerBypassDesc:'Automatische Kaskaden-Umschaltung für kontinuierliches Befüllen ohne Eingriff.',bannerLearnMore:'Mehr erfahren →',blendsReset:'↺ Reset',blendsPurityTitle:'Reinheit der Bank-Gase',blendsPurityO2:'Verfügbare O₂-Reinheit',blendsPurityHe:'Verfügbare He-Reinheit',blendsFinalType:'Mischungsmodus',blendsCustomMix:'Eigene Mischung',blendsBestMix:'Best Mix',blendsMaxDepth:'Max. Tiefe',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Berechneter Best Mix',blendsDensity:'Gasdichte bei max. Tiefe',blendsDrainTitle:'Lösungsvorschlag',blendsDrainSugg:'Flasche um {bars} entleeren (bis {pTo}) vor dem Mischen — die gewünschte Mischung ist aus dem aktuellen Zustand nicht erreichbar.',blendsDrainImpossible:'Selbst vollständig leer ist die gewünschte Mischung mit den aktuellen Bank-Gasen nicht möglich. Mischung anpassen oder reichere Gase verwenden.',blendsFillTime:'≈ {time} Kompressorlaufzeit ({model})',blendsTopUpTime:'≈ {time} Kompressorlaufzeit zum Auffüllen ({model})',blendsBestMixHint:'Best mix bei {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ Bei dieser Tiefe liegt fO₂ außerhalb 0–100%. Tiefe oder ppO₂ ändern.',blendsBestMixHeNeeded:'⚠ END ohne negatives Helium nicht erreichbar — höheres END oder niedrigeres ppO₂ versuchen.',blendsCmpStep:'Schritt',blendsCmpRead:'Druck auf dem Manometer ablesen',blendsCmpReadStick:'Anzeige am Stick'},
+    reset:'↺ Zoom zurücksetzen',zoomHint:'🔍 Ziehen um Temperaturbereich auszuwählen',bannerChillerTitle:'Nardi HP Chiller – Kältetrockner',bannerChillerDesc:'Eingangsluft kühlen und Standzeit der Patronen vervielfachen.',bannerBreathAirTitle:'Nardi Atemluft-Systeme',bannerBreathAirDesc:'Entdecken Sie das gesamte HP-Atemluftkompressoren-Programm.',bannerBypassTitle:'Nardi Automatischer By-Pass-Selektor',bannerBypassDesc:'Automatische Kaskaden-Umschaltung für kontinuierliches Befüllen ohne Eingriff.',bannerLearnMore:'Mehr erfahren →',blendsReset:'↺ Reset',blendsPurityTitle:'Reinheit der Bank-Gase',blendsPurityO2:'Verfügbare O₂-Reinheit',blendsPurityHe:'Verfügbare He-Reinheit',blendsFinalType:'Mischungsmodus',blendsCustomMix:'Eigene Mischung',blendsBestMix:'Best Mix',blendsMaxDepth:'Max. Tiefe',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Berechneter Best Mix',blendsDensity:'Gasdichte bei max. Tiefe',blendsDensityCol:'Dichte',blendsDrainTitle:'Lösungsvorschlag',blendsDrainSugg:'Flasche um {bars} entleeren (bis {pTo}) vor dem Mischen — die gewünschte Mischung ist aus dem aktuellen Zustand nicht erreichbar.',blendsDrainImpossible:'Selbst vollständig leer ist die gewünschte Mischung mit den aktuellen Bank-Gasen nicht möglich. Mischung anpassen oder reichere Gase verwenden.',blendsFillTime:'≈ {time} Kompressorlaufzeit ({model})',blendsTopUpTime:'≈ {time} Kompressorlaufzeit zum Auffüllen ({model})',blendsBestMixHint:'Best mix bei {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ Bei dieser Tiefe liegt fO₂ außerhalb 0–100%. Tiefe oder ppO₂ ändern.',blendsBestMixHeNeeded:'⚠ END ohne negatives Helium nicht erreichbar — höheres END oder niedrigeres ppO₂ versuchen.',blendsCmpStep:'Schritt',blendsCmpRead:'Druck auf dem Manometer ablesen',blendsCmpReadStick:'Anzeige am Stick'},
   es:{flag:'🇪🇸',name:'Español',rtl:false,
     metric:'MÉTRICO',imperial:'IMPERIAL',
     pressure:'Presión de trabajo',model:'Modelo compresor',filters:'Filtros:',
     chiller:'+ Nardi Chiller',hours:'h',at:'a',
     ambTemp:'Temperatura Ambiente',yLbl:'Duración',
     chartTpl:'Duración cartucho {model} a {prs}',
+    customCompressor:'Compresor personalizado',customFlow:'Caudal',cartridgeNotAvailable:'📊 Los datos de vida útil del cartucho solo están disponibles para los compresores Nardi. Selecciona un modelo en la barra lateral para ver el gráfico.',
     tabCartridge:'Duración Cartucho',tabFilling:'Tiempo de Llenado',tabCascade:'Calculador Cascada',cascadeComingSoon:'Próximamente…',labelCyl:'Cilindro',cascConfig:'Configuración Cascada',cascBanks:'Nº botellas',cascBankVol:'Volumen cada',cascBankMaxP:'Presión de carga',cascBank:'Botella',cascInitial:'Estado inicial',cascCylinder:'Botella a llenar',cascReached:'Presión alcanzada',cascTopUp:'Aporte compresor',cascFillable:'Rellenables desde aquí',cascRecharge:'Recarga cascada',cascAfterTransfer:'Tras transferencia cascada',cascVolErr:'⚠ El volumen debe ser > 0 L',genPressErr:'⚠ La presión no puede ser negativa',genVolErr:'⚠ El volumen debe ser mayor que 0',cascReset:'Reset',cascCompCylFill:'Aporte botellas compresor',cascAddCyl:'Añadir botella',tabBlends:'Calculadora de Mezclas',blendsTitle:'Calculadora de mezclas Nitrox/Trimix',blendsInputs:'Parámetros',blendsCylVol:'Volumen botella',blendsCyl:'Botella',blendsPini:'Presión inicial',blendsPfin:'Presión final',blendsInitMix:'Mezcla inicial en la botella',blendsFinalMix:'Mezcla final deseada',blendsO2:'% Oxígeno',blendsHe:'% Helio',blendsN2:'Nitrógeno (calc.)',blendsMethod1:'Método de presiones parciales',blendsMethod2:'Mezcla continua (Stick)',blendsMethod2Desc:'Mezcla continua mediante stick con dos sensores O₂',blendsAddO2:'Oxígeno a cargar',blendsAddHe:'Helio a cargar',blendsAddAir:'Aire del compresor',blendsTopUp:'Completar hasta presión final',blendsImpossible:'⚠ Mezcla imposible — revisa los parámetros (mezcla inicial más rica que la final, o presiones inválidas).',blendsSensor1:'Lectura sensor 1 (tras Helio)',blendsSensor2:'Lectura sensor 2 (tras Oxígeno)',blendsSensorNote:'El aire entra entre el sensor 2 y la botella',blendsTTMix:'TT-Mix Pro — Mezcla automática Nitrox/Trimix',blendsTTMixDesc:'Descubre la solución completa Nardi para mezclar con precisión y de forma totalmente automática.',blendsNitroxGen:'Autoproducción Nitrox',blendsNitroxGenDesc:'Compresores y generadores Nitrox Nardi — produce tus propias mezclas respirables in situ.',blendsLearnMore:'Más información →',blendsResults:'Resultados',blendsPctErr:'⚠ O₂ + He deben ser ≤ 100%',
     labelPini:'Presión Inicial',labelPfin:'Presión Final',labelVhyd:'Volumen Hidráulico',
     hydNote:'El volumen hidráulico es la capacidad del cilindro si se llenara completamente con agua — no el volumen de aire comprimido que contiene.',
     colModel:'Modelo',colFillTime:'Tiempo Llenado',colCylHour:'Cil. / hora',
     colFlow:'Caudal',min:'min',sec:'seg',
-    reset:'↺ Restablecer zoom',zoomHint:'🔍 Arrastrar para seleccionar rango de temperatura',bannerChillerTitle:'Nardi HP Chiller – Secador Refrigerado',bannerChillerDesc:'Enfría el aire de entrada y multiplica la duración de los cartuchos.',bannerBreathAirTitle:'Sistemas de Aire Respirable Nardi',bannerBreathAirDesc:'Descubre toda la gama de compresores HP de aire respirable.',bannerBypassTitle:'Selector Automático By-Pass Nardi',bannerBypassDesc:'Conmutación automática en cascada para llenados continuos sin intervención.',bannerLearnMore:'Más información →',blendsReset:'↺ Reset',blendsPurityTitle:'Pureza de los gases bank',blendsPurityO2:'Pureza O₂ disponible',blendsPurityHe:'Pureza He disponible',blendsFinalType:'Modo mezcla',blendsCustomMix:'Mezcla personalizada',blendsBestMix:'Best Mix',blendsMaxDepth:'Profundidad máx',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Best mix calculado',blendsDensity:'Densidad gas a la profundidad máx.',blendsDrainTitle:'Solución sugerida',blendsDrainSugg:'Vacía la botella en {bars} (hasta {pTo}) antes de mezclar — la mezcla requerida no es alcanzable desde el estado actual.',blendsDrainImpossible:'Incluso completamente vacía, la mezcla solicitada no es alcanzable con los gases bank actuales. Ajusta la mezcla o usa gases más ricos.',blendsFillTime:'≈ {time} de funcionamiento del compresor ({model})',blendsTopUpTime:'≈ {time} de funcionamiento del compresor para completar ({model})',blendsBestMixHint:'Best mix a {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ A esta profundidad, ppO₂ requerida da fO₂ fuera de 0–100%. Ajusta profundidad o ppO₂.',blendsBestMixHeNeeded:'⚠ END inalcanzable sin helio negativo — prueba END mayor o ppO₂ menor.',blendsCmpStep:'Paso',blendsCmpRead:'Presión a leer en el manómetro',blendsCmpReadStick:'Lectura en el stick'},
+    reset:'↺ Restablecer zoom',zoomHint:'🔍 Arrastrar para seleccionar rango de temperatura',bannerChillerTitle:'Nardi HP Chiller – Secador Refrigerado',bannerChillerDesc:'Enfría el aire de entrada y multiplica la duración de los cartuchos.',bannerBreathAirTitle:'Sistemas de Aire Respirable Nardi',bannerBreathAirDesc:'Descubre toda la gama de compresores HP de aire respirable.',bannerBypassTitle:'Selector Automático By-Pass Nardi',bannerBypassDesc:'Conmutación automática en cascada para llenados continuos sin intervención.',bannerLearnMore:'Más información →',blendsReset:'↺ Reset',blendsPurityTitle:'Pureza de los gases bank',blendsPurityO2:'Pureza O₂ disponible',blendsPurityHe:'Pureza He disponible',blendsFinalType:'Modo mezcla',blendsCustomMix:'Mezcla personalizada',blendsBestMix:'Best Mix',blendsMaxDepth:'Profundidad máx',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Best mix calculado',blendsDensity:'Densidad gas a la profundidad máx.',blendsDensityCol:'Densidad',blendsDrainTitle:'Solución sugerida',blendsDrainSugg:'Vacía la botella en {bars} (hasta {pTo}) antes de mezclar — la mezcla requerida no es alcanzable desde el estado actual.',blendsDrainImpossible:'Incluso completamente vacía, la mezcla solicitada no es alcanzable con los gases bank actuales. Ajusta la mezcla o usa gases más ricos.',blendsFillTime:'≈ {time} de funcionamiento del compresor ({model})',blendsTopUpTime:'≈ {time} de funcionamiento del compresor para completar ({model})',blendsBestMixHint:'Best mix a {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ A esta profundidad, ppO₂ requerida da fO₂ fuera de 0–100%. Ajusta profundidad o ppO₂.',blendsBestMixHeNeeded:'⚠ END inalcanzable sin helio negativo — prueba END mayor o ppO₂ menor.',blendsCmpStep:'Paso',blendsCmpRead:'Presión a leer en el manómetro',blendsCmpReadStick:'Lectura en el stick'},
   pt:{flag:'🇵🇹',name:'Português',rtl:false,
     metric:'MÉTRICO',imperial:'IMPERIAL',
     pressure:'Pressão de trabalho',model:'Modelo compressor',filters:'Filtros:',
     chiller:'+ Nardi Chiller',hours:'h',at:'a',
     ambTemp:'Temperatura Ambiente',yLbl:'Duração',
     chartTpl:'Duração cartucho {model} a {prs}',
+    customCompressor:'Compressor personalizado',customFlow:'Vazão',cartridgeNotAvailable:'📊 Os dados de duração do cartucho estão disponíveis apenas para compressores Nardi. Escolha um modelo na barra lateral para ver o gráfico.',
     tabCartridge:'Duração Cartucho',tabFilling:'Tempo de Enchimento',tabCascade:'Calculadora Cascata',cascadeComingSoon:'Em breve…',labelCyl:'Cilindro',cascConfig:'Configuração Cascata',cascBanks:'Nº cilindros',cascBankVol:'Volume cada',cascBankMaxP:'Pressão de carga',cascBank:'Cilindro',cascInitial:'Estado inicial',cascCylinder:'Cilindro a encher',cascReached:'Pressão atingida',cascTopUp:'Complemento compressor',cascFillable:'Enchíveis daqui',cascRecharge:'Recarga cascata',cascAfterTransfer:'Após transferência cascata',cascVolErr:'⚠ O volume deve ser > 0 L',genPressErr:'⚠ A pressão não pode ser negativa',genVolErr:'⚠ O volume deve ser maior que 0',cascReset:'Reset',cascCompCylFill:'Complemento cilindros compressor',cascAddCyl:'Adicionar cilindro',tabBlends:'Calculadora de Misturas',blendsTitle:'Calculadora de misturas Nitrox/Trimix',blendsInputs:'Parâmetros',blendsCylVol:'Volume cilindro',blendsCyl:'Cilindro',blendsPini:'Pressão inicial',blendsPfin:'Pressão final',blendsInitMix:'Mistura inicial no cilindro',blendsFinalMix:'Mistura final desejada',blendsO2:'% Oxigênio',blendsHe:'% Hélio',blendsN2:'Nitrogênio (calc.)',blendsMethod1:'Método de pressões parciais',blendsMethod2:'Mistura contínua (Stick)',blendsMethod2Desc:'Mistura contínua via stick com dois sensores O₂',blendsAddO2:'Oxigênio a carregar',blendsAddHe:'Hélio a carregar',blendsAddAir:'Ar do compressor',blendsTopUp:'Completar até pressão final',blendsImpossible:'⚠ Mistura impossível — verifique os parâmetros (mistura inicial mais rica que a final, ou pressões inválidas).',blendsSensor1:'Leitura sensor 1 (após adicionar Hélio)',blendsSensor2:'Leitura sensor 2 (após adicionar Oxigênio)',blendsSensorNote:'O ar entra entre o sensor 2 e o cilindro',blendsTTMix:'TT-Mix Pro — Mistura automática Nitrox/Trimix',blendsTTMixDesc:'Descubra a solução completa Nardi para misturar com precisão e de forma totalmente automática.',blendsNitroxGen:'Autoprodução Nitrox',blendsNitroxGenDesc:'Compressores e geradores Nitrox Nardi — produza as suas misturas respiráveis no local.',blendsLearnMore:'Saiba mais →',blendsResults:'Resultados',blendsPctErr:'⚠ O₂ + He devem ser ≤ 100%',
     labelPini:'Pressão Inicial',labelPfin:'Pressão Final',labelVhyd:'Volume Hidráulico',
     hydNote:'O volume hidráulico é a capacidade do cilindro se fosse completamente preenchido com água — não o volume de ar comprimido que contém.',
     colModel:'Modelo',colFillTime:'Tempo Enchimento',colCylHour:'Cil. / hora',
     colFlow:'Vazão',min:'min',sec:'seg',
-    reset:'↺ Repor zoom',zoomHint:'🔍 Arraste para seleccionar intervalo de temperatura',bannerChillerTitle:'Nardi HP Chiller – Secador Refrigerado',bannerChillerDesc:'Arrefeça o ar de entrada e multiplique a duração dos cartuchos.',bannerBreathAirTitle:'Sistemas de Ar Respirável Nardi',bannerBreathAirDesc:'Descubra toda a gama de compressores HP de ar respirável.',bannerBypassTitle:'Seletor Automático By-Pass Nardi',bannerBypassDesc:'Comutação automática em cascata para enchimentos contínuos sem intervenção.',bannerLearnMore:'Saiba mais →',blendsReset:'↺ Reset',blendsPurityTitle:'Pureza dos gases bank',blendsPurityO2:'Pureza O₂ disponible',blendsPurityHe:'Pureza He disponible',blendsFinalType:'Modo mistura',blendsCustomMix:'Mistura personalizada',blendsBestMix:'Best Mix',blendsMaxDepth:'Profundidade máx',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Best mix calculado',blendsDensity:'Densidade do gás à profundidade máx.',blendsDrainTitle:'Solução sugerida',blendsDrainSugg:'Esvazie o cilindro em {bars} (até {pTo}) antes de misturar — a mistura pedida não é atingível a partir do estado atual.',blendsDrainImpossible:'Mesmo totalmente vazio, a mistura pedida não é atingível com os gases bank atuais. Ajuste a mistura ou use gases mais ricos.',blendsFillTime:'≈ {time} de funcionamento do compressor ({model})',blendsTopUpTime:'≈ {time} de funcionamento do compressor para completar ({model})',blendsBestMixHint:'Best mix a {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ Nesta profundidade, ppO₂ pedida dá fO₂ fora de 0–100%. Ajuste profundidade ou ppO₂.',blendsBestMixHeNeeded:'⚠ END inatingível sem hélio negativo — tente END maior ou ppO₂ menor.',blendsCmpStep:'Passo',blendsCmpRead:'Pressão a ler no manómetro',blendsCmpReadStick:'Leitura no stick'},
+    reset:'↺ Repor zoom',zoomHint:'🔍 Arraste para seleccionar intervalo de temperatura',bannerChillerTitle:'Nardi HP Chiller – Secador Refrigerado',bannerChillerDesc:'Arrefeça o ar de entrada e multiplique a duração dos cartuchos.',bannerBreathAirTitle:'Sistemas de Ar Respirável Nardi',bannerBreathAirDesc:'Descubra toda a gama de compressores HP de ar respirável.',bannerBypassTitle:'Seletor Automático By-Pass Nardi',bannerBypassDesc:'Comutação automática em cascata para enchimentos contínuos sem intervenção.',bannerLearnMore:'Saiba mais →',blendsReset:'↺ Reset',blendsPurityTitle:'Pureza dos gases bank',blendsPurityO2:'Pureza O₂ disponible',blendsPurityHe:'Pureza He disponible',blendsFinalType:'Modo mistura',blendsCustomMix:'Mistura personalizada',blendsBestMix:'Best Mix',blendsMaxDepth:'Profundidade máx',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Best mix calculado',blendsDensity:'Densidade do gás à profundidade máx.',blendsDensityCol:'Densidade',blendsDrainTitle:'Solução sugerida',blendsDrainSugg:'Esvazie o cilindro em {bars} (até {pTo}) antes de misturar — a mistura pedida não é atingível a partir do estado atual.',blendsDrainImpossible:'Mesmo totalmente vazio, a mistura pedida não é atingível com os gases bank atuais. Ajuste a mistura ou use gases mais ricos.',blendsFillTime:'≈ {time} de funcionamento do compressor ({model})',blendsTopUpTime:'≈ {time} de funcionamento do compressor para completar ({model})',blendsBestMixHint:'Best mix a {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ Nesta profundidade, ppO₂ pedida dá fO₂ fora de 0–100%. Ajuste profundidade ou ppO₂.',blendsBestMixHeNeeded:'⚠ END inatingível sem hélio negativo — tente END maior ou ppO₂ menor.',blendsCmpStep:'Passo',blendsCmpRead:'Pressão a ler no manómetro',blendsCmpReadStick:'Leitura no stick'},
   zh:{flag:'🇨🇳',name:'中文',rtl:false,
     metric:'公制',imperial:'英制',
     pressure:'工作压力',model:'压缩机型号',filters:'滤芯:',
     chiller:'+ Nardi制冷机',hours:'h',at:'在',
     ambTemp:'环境温度',yLbl:'寿命',
     chartTpl:'{model} 滤芯寿命 {prs}',
+    customCompressor:'自定义压缩机',customFlow:'流量',cartridgeNotAvailable:'📊 滤芯寿命数据仅适用于 Nardi 压缩机。请在侧栏中选择型号以查看图表。',
     tabCartridge:'滤芯寿命',tabFilling:'充气时间',tabCascade:'级联计算器',cascadeComingSoon:'即将推出…',labelCyl:'气瓶',cascConfig:'级联配置',cascBanks:'气瓶数量',cascBankVol:'单个容积',cascBankMaxP:'充气压力',cascBank:'气瓶',cascInitial:'初始状态',cascCylinder:'待充气瓶',cascReached:'达到压力',cascTopUp:'压缩机补充',cascFillable:'可充数量',cascRecharge:'级联补充',cascAfterTransfer:'级联转移后',cascVolErr:'⚠ 容积必须 > 0 L',genPressErr:'⚠ 压力不能为负',genVolErr:'⚠ 容积必须大于 0',cascReset:'Reset',cascCompCylFill:'压缩机气瓶补充',cascAddCyl:'添加气瓶',tabBlends:'混合气计算器',blendsTitle:'Nitrox/Trimix 混合气计算器',blendsInputs:'参数',blendsCylVol:'气瓶容积',blendsCyl:'气瓶',blendsPini:'初始压力',blendsPfin:'最终压力',blendsInitMix:'气瓶初始混合气',blendsFinalMix:'所需最终混合气',blendsO2:'% 氧气',blendsHe:'% 氦气',blendsN2:'氮气（计算值）',blendsMethod1:'分压法',blendsMethod2:'连续混合（Stick）',blendsMethod2Desc:'通过带两个氧气传感器的混合棒进行连续混合',blendsAddO2:'需充入氧气',blendsAddHe:'需充入氦气',blendsAddAir:'压缩机空气',blendsTopUp:'补足至最终压力',blendsImpossible:'⚠ 此参数下混合气不可行 — 请检查参数（初始混合气比目标更富氧或氦，或压力无效）。',blendsSensor1:'传感器 1 读数（添加氦气后）',blendsSensor2:'传感器 2 读数（添加氧气后）',blendsSensorNote:'空气在传感器 2 与气瓶之间进入',blendsTTMix:'TT-Mix Pro — 全自动 Nitrox/Trimix 混合系统',blendsTTMixDesc:'了解 Nardi 完整的精准全自动气体混合解决方案。',blendsNitroxGen:'Nitrox 自产',blendsNitroxGenDesc:'Nardi 压缩机与 Nitrox 发生器 — 在现场自产呼吸气体混合气。',blendsLearnMore:'了解更多 →',blendsResults:'结果',blendsPctErr:'⚠ O₂ + He 总和必须 ≤ 100%',
     labelPini:'初始压力',labelPfin:'终止压力',labelVhyd:'水容积',
     hydNote:'水容积是指气瓶完全注满水时的容积，而非所含压缩空气的体积。',
     colModel:'型号',colFillTime:'充气时间',colCylHour:'瓶/小时',
     colFlow:'流量',min:'分',sec:'秒',
-    reset:'↺ 重置缩放',zoomHint:'🔍 拖动选择温度范围进行缩放',bannerChillerTitle:'Nardi HP 冷干机',bannerChillerDesc:'降低进气温度，成倍延长滤芯寿命。',bannerBreathAirTitle:'Nardi 呼吸气体系统',bannerBreathAirDesc:'探索全系列高压呼吸空气压缩机。',bannerBypassTitle:'Nardi 自动旁通选择器',bannerBypassDesc:'级联自动切换，实现持续无人值守充气。',bannerLearnMore:'了解更多 →',blendsReset:'↺ Reset',blendsPurityTitle:'Bank 气体纯度',blendsPurityO2:'可用 O₂ 纯度',blendsPurityHe:'可用 He 纯度',blendsFinalType:'混合模式',blendsCustomMix:'自定义混合',blendsBestMix:'最佳混合',blendsMaxDepth:'最大深度',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'计算所得最佳混合气',blendsDensity:'最大深度处气体密度',blendsDrainTitle:'建议方案',blendsDrainSugg:'混合前先从气瓶放出 {bars}（降至 {pTo}）— 当前状态无法达到所需混合气。',blendsDrainImpossible:'即使完全放空，使用当前 bank 气体也无法达到所需混合气。请调整混合气或使用更高纯度气体。',blendsFillTime:'≈ {time} 压缩机运行时间 ({model})',blendsTopUpTime:'≈ {time} 压缩机补充运行时间 ({model})',blendsBestMixHint:'{depth} 处的最佳混合气 – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:'，END {end}',blendsBestMixOutOfRange:'⚠ 此深度下所需 ppO₂ 使 fO₂ 超出 0–100%。请调整深度或 ppO₂。',blendsBestMixHeNeeded:'⚠ 没有负氦的情况下无法达到 END — 请尝试更深 END 或更低 ppO₂。',blendsCmpStep:'步骤',blendsCmpRead:'压力表上应读取的压力',blendsCmpReadStick:'混合棒读数'},
+    reset:'↺ 重置缩放',zoomHint:'🔍 拖动选择温度范围进行缩放',bannerChillerTitle:'Nardi HP 冷干机',bannerChillerDesc:'降低进气温度，成倍延长滤芯寿命。',bannerBreathAirTitle:'Nardi 呼吸气体系统',bannerBreathAirDesc:'探索全系列高压呼吸空气压缩机。',bannerBypassTitle:'Nardi 自动旁通选择器',bannerBypassDesc:'级联自动切换，实现持续无人值守充气。',bannerLearnMore:'了解更多 →',blendsReset:'↺ Reset',blendsPurityTitle:'Bank 气体纯度',blendsPurityO2:'可用 O₂ 纯度',blendsPurityHe:'可用 He 纯度',blendsFinalType:'混合模式',blendsCustomMix:'自定义混合',blendsBestMix:'最佳混合',blendsMaxDepth:'最大深度',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'计算所得最佳混合气',blendsDensity:'最大深度处气体密度',blendsDensityCol:'密度',blendsDrainTitle:'建议方案',blendsDrainSugg:'混合前先从气瓶放出 {bars}（降至 {pTo}）— 当前状态无法达到所需混合气。',blendsDrainImpossible:'即使完全放空，使用当前 bank 气体也无法达到所需混合气。请调整混合气或使用更高纯度气体。',blendsFillTime:'≈ {time} 压缩机运行时间 ({model})',blendsTopUpTime:'≈ {time} 压缩机补充运行时间 ({model})',blendsBestMixHint:'{depth} 处的最佳混合气 – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:'，END {end}',blendsBestMixOutOfRange:'⚠ 此深度下所需 ppO₂ 使 fO₂ 超出 0–100%。请调整深度或 ppO₂。',blendsBestMixHeNeeded:'⚠ 没有负氦的情况下无法达到 END — 请尝试更深 END 或更低 ppO₂。',blendsCmpStep:'步骤',blendsCmpRead:'压力表上应读取的压力',blendsCmpReadStick:'混合棒读数'},
   ru:{flag:'🇷🇺',name:'Русский',rtl:false,
     metric:'МЕТРИЧ.',imperial:'ИМПЕР.',
     pressure:'Рабочее давление',model:'Модель компрессора',filters:'Фильтры:',
     chiller:'+ Nardi Chiller',hours:'ч',at:'при',
     ambTemp:'Температура окр. среды',yLbl:'Ресурс',
     chartTpl:'Ресурс картриджа {model} при {prs}',
+    customCompressor:'Свой компрессор',customFlow:'Расход',cartridgeNotAvailable:'📊 Данные по ресурсу картриджа доступны только для компрессоров Nardi. Выберите модель в боковой панели, чтобы увидеть график.',
     tabCartridge:'Ресурс картриджа',tabFilling:'Время заправки',tabCascade:'Каскадный расчёт',cascadeComingSoon:'Скоро…',labelCyl:'Баллон',cascConfig:'Конфигурация каскада',cascBanks:'Кол-во баллонов',cascBankVol:'Объём каждого',cascBankMaxP:'Давление зарядки',cascBank:'Баллон',cascInitial:'Начальное состояние',cascCylinder:'Заправляемый баллон',cascReached:'Достигнутое давление',cascTopUp:'Дозаправка компрессором',cascFillable:'Баллонов от здесь',cascRecharge:'Подзарядка каскада',cascAfterTransfer:'После каскадной передачи',cascVolErr:'⚠ Объём должен быть > 0 л',genPressErr:'⚠ Давление не может быть отрицательным',genVolErr:'⚠ Объём должен быть больше 0',cascReset:'Reset',cascCompCylFill:'Дозаправка баллонов компрессором',cascAddCyl:'Добавить баллон',tabBlends:'Калькулятор смесей',blendsTitle:'Калькулятор смесей Nitrox/Trimix',blendsInputs:'Параметры',blendsCylVol:'Объём баллона',blendsCyl:'Баллон',blendsPini:'Начальное давление',blendsPfin:'Конечное давление',blendsInitMix:'Начальная смесь в баллоне',blendsFinalMix:'Желаемая конечная смесь',blendsO2:'% Кислорода',blendsHe:'% Гелия',blendsN2:'Азот (расч.)',blendsMethod1:'Метод парциальных давлений',blendsMethod2:'Непрерывное смешивание (Stick)',blendsMethod2Desc:'Непрерывное смешивание через стик с двумя O₂-датчиками',blendsAddO2:'Закачать кислорода',blendsAddHe:'Закачать гелия',blendsAddAir:'Воздух от компрессора',blendsTopUp:'Дозаправка до конечного давления',blendsImpossible:'⚠ Смесь невозможна — проверьте параметры (начальная смесь богаче конечной или неверные давления).',blendsSensor1:'Показание датчика 1 (после добавления Гелия)',blendsSensor2:'Показание датчика 2 (после добавления Кислорода)',blendsSensorNote:'Воздух поступает между датчиком 2 и баллоном',blendsTTMix:'TT-Mix Pro — Автоматическое смешивание Nitrox/Trimix',blendsTTMixDesc:'Откройте для себя комплексное решение Nardi для точного полностью автоматического смешивания.',blendsNitroxGen:'Собственное производство Nitrox',blendsNitroxGenDesc:'Компрессоры и генераторы Nitrox от Nardi — производите дыхательные смеси прямо на месте.',blendsLearnMore:'Узнать больше →',blendsResults:'Результаты',blendsPctErr:'⚠ O₂ + He должны быть ≤ 100%',
     labelPini:'Нач. давление',labelPfin:'Кон. давление',labelVhyd:'Водяной объём',
     hydNote:'Водяной объём — вместимость баллона при полном заполнении водой, не объём сжатого воздуха.',
     colModel:'Модель',colFillTime:'Время заправки',colCylHour:'Балл. / час',
     colFlow:'Расход',min:'мин',sec:'сек',
-    reset:'↺ Сбросить масштаб',zoomHint:'🔍 Потяните для выбора диапазона температур',bannerChillerTitle:'Nardi HP Chiller – Рефрижераторный осушитель',bannerChillerDesc:'Охладите всасываемый воздух и многократно увеличьте ресурс картриджей.',bannerBreathAirTitle:'Системы дыхательного воздуха Nardi',bannerBreathAirDesc:'Откройте полный модельный ряд HP-компрессоров дыхательного воздуха.',bannerBypassTitle:'Автоматический переключатель By-Pass Nardi',bannerBypassDesc:'Автоматическое переключение каскада для непрерывной заправки без вмешательства.',bannerLearnMore:'Узнать больше →',blendsReset:'↺ Reset',blendsPurityTitle:'Чистота газов в bank-баллонах',blendsPurityO2:'Доступная чистота O₂',blendsPurityHe:'Доступная чистота He',blendsFinalType:'Режим смеси',blendsCustomMix:'Своя смесь',blendsBestMix:'Best Mix',blendsMaxDepth:'Макс. глубина',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Расчётный Best Mix',blendsDensity:'Плотность смеси на макс. глубине',blendsDrainTitle:'Рекомендуемое решение',blendsDrainSugg:'Сбросьте из баллона {bars} (до {pTo}) перед смешиванием — требуемая смесь недостижима из текущего состояния.',blendsDrainImpossible:'Даже пустая, требуемая смесь недостижима из текущих bank-газов. Измените смесь или используйте более насыщенные газы.',blendsFillTime:'≈ {time} работы компрессора ({model})',blendsTopUpTime:'≈ {time} работы компрессора для дозаправки ({model})',blendsBestMixHint:'Best mix на {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ На этой глубине требуемое ppO₂ даёт fO₂ вне 0–100%. Измените глубину или ppO₂.',blendsBestMixHeNeeded:'⚠ END недостижим без отрицательного гелия — попробуйте больший END или меньший ppO₂.',blendsCmpStep:'Шаг',blendsCmpRead:'Давление на манометре для считывания',blendsCmpReadStick:'Показания на стике'},
+    reset:'↺ Сбросить масштаб',zoomHint:'🔍 Потяните для выбора диапазона температур',bannerChillerTitle:'Nardi HP Chiller – Рефрижераторный осушитель',bannerChillerDesc:'Охладите всасываемый воздух и многократно увеличьте ресурс картриджей.',bannerBreathAirTitle:'Системы дыхательного воздуха Nardi',bannerBreathAirDesc:'Откройте полный модельный ряд HP-компрессоров дыхательного воздуха.',bannerBypassTitle:'Автоматический переключатель By-Pass Nardi',bannerBypassDesc:'Автоматическое переключение каскада для непрерывной заправки без вмешательства.',bannerLearnMore:'Узнать больше →',blendsReset:'↺ Reset',blendsPurityTitle:'Чистота газов в bank-баллонах',blendsPurityO2:'Доступная чистота O₂',blendsPurityHe:'Доступная чистота He',blendsFinalType:'Режим смеси',blendsCustomMix:'Своя смесь',blendsBestMix:'Best Mix',blendsMaxDepth:'Макс. глубина',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'Расчётный Best Mix',blendsDensity:'Плотность смеси на макс. глубине',blendsDensityCol:'Плотность',blendsDrainTitle:'Рекомендуемое решение',blendsDrainSugg:'Сбросьте из баллона {bars} (до {pTo}) перед смешиванием — требуемая смесь недостижима из текущего состояния.',blendsDrainImpossible:'Даже пустая, требуемая смесь недостижима из текущих bank-газов. Измените смесь или используйте более насыщенные газы.',blendsFillTime:'≈ {time} работы компрессора ({model})',blendsTopUpTime:'≈ {time} работы компрессора для дозаправки ({model})',blendsBestMixHint:'Best mix на {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:', END {end}',blendsBestMixOutOfRange:'⚠ На этой глубине требуемое ppO₂ даёт fO₂ вне 0–100%. Измените глубину или ppO₂.',blendsBestMixHeNeeded:'⚠ END недостижим без отрицательного гелия — попробуйте больший END или меньший ppO₂.',blendsCmpStep:'Шаг',blendsCmpRead:'Давление на манометре для считывания',blendsCmpReadStick:'Показания на стике'},
   ar:{flag:'🇸🇦',name:'العربية',rtl:true,
     metric:'متري',imperial:'إمبريالي',
     pressure:'ضغط العمل',model:'طراز الضاغط',filters:'المرشحات:',
     chiller:'+ Nardi Chiller',hours:'س',at:'عند',
     ambTemp:'درجة الحرارة المحيطة',yLbl:'العمر',
     chartTpl:'عمر خرطوشة {model} عند {prs}',
+    customCompressor:'ضاغط مخصص',customFlow:'معدل التدفق',cartridgeNotAvailable:'📊 بيانات عمر الخرطوشة متاحة فقط لضواغط Nardi. اختر طرازًا من الشريط الجانبي لعرض الرسم البياني.',
     tabCartridge:'عمر الخرطوشة',tabFilling:'وقت الملء',tabCascade:'حاسبة التتالي',cascadeComingSoon:'قريباً…',labelCyl:'أسطوانة',cascConfig:'إعداد التتالي',cascBanks:'عدد الأسطوانات',cascBankVol:'حجم كل منها',cascBankMaxP:'ضغط الشحن',cascBank:'أسطوانة',cascInitial:'الحالة الابتدائية',cascCylinder:'أسطوانة للملء',cascReached:'الضغط المحقق',cascTopUp:'إضافة من الضاغط',cascFillable:'يمكن ملؤها من هنا',cascRecharge:'إعادة شحن التتالي',cascAfterTransfer:'بعد نقل التتالي',cascVolErr:'⚠ يجب أن يكون الحجم أكبر من 0 لتر',genPressErr:'⚠ لا يمكن أن يكون الضغط سالباً',genVolErr:'⚠ يجب أن يكون الحجم أكبر من 0',cascReset:'Reset',cascCompCylFill:'تعبئة الأسطوانات بالضاغط',cascAddCyl:'إضافة أسطوانة',tabBlends:'حاسبة المزائج',blendsTitle:'حاسبة مزائج Nitrox/Trimix',blendsInputs:'المعطيات',blendsCylVol:'حجم الأسطوانة',blendsCyl:'أسطوانة',blendsPini:'الضغط الابتدائي',blendsPfin:'الضغط النهائي',blendsInitMix:'المزيج الابتدائي في الأسطوانة',blendsFinalMix:'المزيج النهائي المطلوب',blendsO2:'% الأكسجين',blendsHe:'% الهيليوم',blendsN2:'النيتروجين (محسوب)',blendsMethod1:'طريقة الضغوط الجزئية',blendsMethod2:'المزج المستمر (Stick)',blendsMethod2Desc:'مزج مستمر عبر عصا مزج بمستشعرَي أكسجين',blendsAddO2:'الأكسجين المراد شحنه',blendsAddHe:'الهيليوم المراد شحنه',blendsAddAir:'هواء من الضاغط',blendsTopUp:'الإكمال حتى الضغط النهائي',blendsImpossible:'⚠ مزيج غير ممكن — تحقق من المعطيات (المزيج الابتدائي أغنى من النهائي أو ضغوط غير صالحة).',blendsSensor1:'قراءة المستشعر 1 (بعد إضافة الهيليوم)',blendsSensor2:'قراءة المستشعر 2 (بعد إضافة الأكسجين)',blendsSensorNote:'الهواء يدخل بين المستشعر 2 والأسطوانة',blendsTTMix:'TT-Mix Pro — خلط أوتوماتيكي Nitrox/Trimix',blendsTTMixDesc:'اكتشف حل Nardi الكامل للخلط الدقيق والأوتوماتيكي بالكامل.',blendsNitroxGen:'الإنتاج الذاتي للنيتروكس',blendsNitroxGenDesc:'ضواغط ومولدات Nitrox من Nardi — أنتج مزائج التنفس الخاصة بك في الموقع.',blendsLearnMore:'اعرف المزيد →',blendsResults:'النتائج',blendsPctErr:'⚠ O₂ + He يجب أن يكون ≤ 100%',
     labelPini:'الضغط الابتدائي',labelPfin:'الضغط النهائي',labelVhyd:'الحجم الهيدروليكي',
     hydNote:'الحجم الهيدروليكي هو سعة الأسطوانة إذا ملئت بالكامل بالماء — وليس حجم الهواء المضغوط الذي تحتويه.',
     colModel:'الطراز',colFillTime:'وقت الملء',colCylHour:'أسط. / ساعة',
     colFlow:'معدل التدفق',min:'د',sec:'ث',
-    reset:'↺ إعادة التكبير',zoomHint:'🔍 اسحب لتحديد نطاق درجة الحرارة',bannerChillerTitle:'Nardi HP Chiller – مجفّف تبريد',bannerChillerDesc:'برّد هواء المدخل وضاعف عمر الخراطيش.',bannerBreathAirTitle:'أنظمة هواء التنفس من Nardi',bannerBreathAirDesc:'اكتشف كامل تشكيلة ضواغط هواء التنفس عالية الضغط.',bannerBypassTitle:'محدد التحويل التلقائي من Nardi',bannerBypassDesc:'تحويل تلقائي للتتالي لتعبئة مستمرة دون تدخل يدوي.',bannerLearnMore:'اعرف المزيد →',blendsReset:'↺ Reset',blendsPurityTitle:'نقاوة غازات الـ Bank',blendsPurityO2:'نقاوة O₂ المتاحة',blendsPurityHe:'نقاوة He المتاحة',blendsFinalType:'وضع المزيج',blendsCustomMix:'مزيج مخصص',blendsBestMix:'أفضل مزيج',blendsMaxDepth:'العمق الأقصى',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'أفضل مزيج محسوب',blendsDensity:'كثافة الغاز عند العمق الأقصى',blendsDrainTitle:'الحل المقترح',blendsDrainSugg:'أفرغ الأسطوانة بمقدار {bars} (حتى {pTo}) قبل المزج — المزيج المطلوب غير قابل للتحقيق من الحالة الحالية.',blendsDrainImpossible:'حتى مع التفريغ الكامل، لا يمكن الوصول إلى المزيج المطلوب باستخدام غازات الـ bank الحالية. عدّل المزيج أو استخدم غازات أنقى.',blendsFillTime:'≈ {time} من تشغيل الضاغط ({model})',blendsTopUpTime:'≈ {time} من تشغيل الضاغط للإكمال ({model})',blendsBestMixHint:'أفضل مزيج عند {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:'، END {end}',blendsBestMixOutOfRange:'⚠ عند هذا العمق، ppO₂ المطلوب يعطي fO₂ خارج 0–100%. عدّل العمق أو ppO₂.',blendsBestMixHeNeeded:'⚠ لا يمكن بلوغ END بدون هيليوم سالب — جرّب END أكبر أو ppO₂ أصغر.',blendsCmpStep:'خطوة',blendsCmpRead:'الضغط الذي يجب قراءته على المانومتر',blendsCmpReadStick:'قراءة على عصا المزج'},
+    reset:'↺ إعادة التكبير',zoomHint:'🔍 اسحب لتحديد نطاق درجة الحرارة',bannerChillerTitle:'Nardi HP Chiller – مجفّف تبريد',bannerChillerDesc:'برّد هواء المدخل وضاعف عمر الخراطيش.',bannerBreathAirTitle:'أنظمة هواء التنفس من Nardi',bannerBreathAirDesc:'اكتشف كامل تشكيلة ضواغط هواء التنفس عالية الضغط.',bannerBypassTitle:'محدد التحويل التلقائي من Nardi',bannerBypassDesc:'تحويل تلقائي للتتالي لتعبئة مستمرة دون تدخل يدوي.',bannerLearnMore:'اعرف المزيد →',blendsReset:'↺ Reset',blendsPurityTitle:'نقاوة غازات الـ Bank',blendsPurityO2:'نقاوة O₂ المتاحة',blendsPurityHe:'نقاوة He المتاحة',blendsFinalType:'وضع المزيج',blendsCustomMix:'مزيج مخصص',blendsBestMix:'أفضل مزيج',blendsMaxDepth:'العمق الأقصى',blendsPpO2:'ppO₂',blendsEND:'END',blendsBestMixResult:'أفضل مزيج محسوب',blendsDensity:'كثافة الغاز عند العمق الأقصى',blendsDensityCol:'الكثافة',blendsDrainTitle:'الحل المقترح',blendsDrainSugg:'أفرغ الأسطوانة بمقدار {bars} (حتى {pTo}) قبل المزج — المزيج المطلوب غير قابل للتحقيق من الحالة الحالية.',blendsDrainImpossible:'حتى مع التفريغ الكامل، لا يمكن الوصول إلى المزيج المطلوب باستخدام غازات الـ bank الحالية. عدّل المزيج أو استخدم غازات أنقى.',blendsFillTime:'≈ {time} من تشغيل الضاغط ({model})',blendsTopUpTime:'≈ {time} من تشغيل الضاغط للإكمال ({model})',blendsBestMixHint:'أفضل مزيج عند {depth} – ppO₂ {ppo2}{endTxt}',blendsBestMixEndTxt:'، END {end}',blendsBestMixOutOfRange:'⚠ عند هذا العمق، ppO₂ المطلوب يعطي fO₂ خارج 0–100%. عدّل العمق أو ppO₂.',blendsBestMixHeNeeded:'⚠ لا يمكن بلوغ END بدون هيليوم سالب — جرّب END أكبر أو ppO₂ أصغر.',blendsCmpStep:'خطوة',blendsCmpRead:'الضغط الذي يجب قراءته على المانومتر',blendsCmpReadStick:'قراءة على عصا المزج'},
 };
 
 // ── STATE ─────────────────────────────────────────────
-let S={lang:'en',unit:'metric',pressure:200,model:'Pacific 16',view:(new URLSearchParams(location.search).get('view')||'cartridge')};
+let S={lang:'en',unit:'metric',pressure:200,model:'Pacific 16',customFlow:0,customFlowUnit:'lmin',view:(new URLSearchParams(location.search).get('view')||'cartridge')};
+// Custom-compressor support: when S.model === 'Custom' the flow rate is taken from S.customFlow (always stored in L/min).
+// modelFlow(m) is the canonical accessor used by Filling Time / Cascade / Blender so they share the same logic.
+const CUSTOM_MODEL = 'Custom';
+function modelFlow(m){ return m === CUSTOM_MODEL ? (parseFloat(S.customFlow)||0) : (FLOW_LMIN[m]||0); }
+// Flow unit conversion table → multiplier to L/min.
+const FLOW_UNIT_TO_LMIN = { lmin:1, m3h:1000/60, cfm:28.317, cfh:28.317/60 };
+const FLOW_UNIT_LABEL = { lmin:'L/min', m3h:'m³/h', cfm:'CFM', cfh:'CFH' };
 let pacOn={'PAC 1':true,'PAC 2':true,'PAC 3':true,'PAC3+3':true};
 let chillOn={'PAC 1':true,'PAC 2':true,'PAC 3':true,'PAC3+3':true};
 let atlOn={'ATL':true};
@@ -962,8 +998,12 @@ const toDisp=c=>S.unit==='metric'?c:+(c*9/5+32).toFixed(1);
 const tUnit=()=>S.unit==='metric'?'°C':'°F';
 const pLabel=bar=>S.unit==='metric'?`${bar} bar`:bar===200?'2900 PSI':'4350 PSI';
 const flowDisp=q=>S.unit==='metric'
-  ?`${q}<span class="ft-flow-unit"> L/min</span>`
+  ?`${(+q).toFixed(0)}<span class="ft-flow-unit"> L/min</span>`
   :`${(q/28.317).toFixed(1)}<span class="ft-flow-unit"> CFM</span>`;
+// Per-hour flow display (m³/h in metric, CFH in imperial).
+const flowDispHr=q=>S.unit==='metric'
+  ?`${(q*0.06).toFixed(1)}<span class="ft-flow-unit"> m³/h</span>`
+  :`${(q*60/28.317).toFixed(1)}<span class="ft-flow-unit"> CFH</span>`;
 
 // ── VIEW SWITCHING ─────────────────────────────────────
 function setView(v){
@@ -995,6 +1035,8 @@ function renderFillingTable(){
   tbody.innerHTML='';
   document.getElementById('colFlowHdr').textContent=
     t.colFlow+' ['+(S.unit==='metric'?'L/min':'CFM')+']';
+  document.getElementById('colFlowHrHdr').textContent=
+    t.colFlow+' ['+(S.unit==='metric'?'m³/h':'CFH')+']';
 
   const isImp=S.unit==='imperial';
 
@@ -1018,27 +1060,30 @@ function renderFillingTable(){
     vHydL=Math.max(0.1, parseFloat(document.getElementById('inVhyd').value)||0.1);
   }
 
-  MODELS.forEach(m=>{
-    const Q=FLOW_LMIN[m]; // always L/min
+  // Builds one row for a given (label, Q in L/min). Used both for built-in models and Custom.
+  function appendFillRow(label, Q, key){
     let tMin;
     if(isImp){
-      // tMin = volCuft / Q_cfm,  Q_cfm = Q_lmin / 28.317
-      const Q_cfm=Q/28.317;
-      tMin=(volCuft>0&&Q_cfm>0)?volCuft/Q_cfm:null;
+      const Q_cfm = Q/28.317;
+      tMin = (volCuft>0 && Q_cfm>0) ? volCuft/Q_cfm : null;
     } else {
-      tMin=fillTimeMin(Q,pIniM,pFinM,vHydL);
+      tMin = fillTimeMin(Q, pIniM, pFinM, vHydL);
     }
-    const cph=cylPerHour(tMin);
-    const tr=document.createElement('tr');
-    if(m===S.model) tr.className='selected';
-    tr.innerHTML=`
-      <td class="ft-model">${m}</td>
-      <td class="ft-flow">${flowDisp(Q)}</td>
-      <td class="ft-time">${fmtTime(tMin,t)}</td>
-      <td class="ft-cph">${cph!==null?cph.toFixed(1):'—'}</td>`;
-    tr.onclick=()=>{S.model=m;buildModelList();renderFillingTable();};
+    const cph = cylPerHour(tMin);
+    const tr = document.createElement('tr');
+    if(key === S.model) tr.className = 'selected';
+    tr.innerHTML = `
+      <td class="ft-model">${label}</td>
+      <td class="ft-flow">${Q>0?flowDisp(Q):'—'}</td>
+      <td class="ft-flow">${Q>0?flowDispHr(Q):'—'}</td>
+      <td class="ft-time">${Q>0?fmtTime(tMin,t):'—'}</td>
+      <td class="ft-cph">${(Q>0 && cph!==null)?cph.toFixed(1):'—'}</td>`;
+    tr.onclick = () => { S.model = key; buildModelList(); renderFillingTable(); };
     tbody.appendChild(tr);
-  });
+  }
+  MODELS.forEach(m => appendFillRow(m, FLOW_LMIN[m], m));
+  // Always show the "Custom compressor" row at the bottom — Q is taken from S.customFlow when set.
+  appendFillRow(t.customCompressor || 'Custom compressor', modelFlow(CUSTOM_MODEL), CUSTOM_MODEL);
 
   // Show/hide fields
   document.getElementById('fieldVhyd').classList.toggle('fill-field-hide',isImp);
@@ -1051,6 +1096,9 @@ function renderFillingTable(){
 function mkDatasets(){
   const temps=Array.from({length:61},(_,i)=>i);
   const ds=[];
+
+  // Custom compressor has no cartridge curve in our dataset — return empty.
+  if(S.model === CUSTOM_MODEL) return ds;
 
   if(isAtlantic(S.model)){
     // Atlantic: single ATL curve from lookup table, no chiller
@@ -1140,12 +1188,21 @@ function mkOpts(){
 function renderChart(){
   updateChartTitle();
   const ds=mkDatasets();
+  const t=LANG[S.lang];
+  // Custom compressor: hide chart canvas + show placeholder message.
+  const isCustom = (S.model === CUSTOM_MODEL);
+  const canvas = document.getElementById('mainChart');
+  const msgEl  = document.getElementById('chartCustomMsg');
+  if(canvas) canvas.style.display = isCustom ? 'none' : '';
+  if(msgEl){
+    msgEl.classList.toggle('show', isCustom);
+    msgEl.textContent = t.cartridgeNotAvailable || '📊 Cartridge lifetime data is only available for Nardi compressors. Pick a model from the sidebar to see the chart.';
+  }
   if(!myChart){
     myChart=new Chart(document.getElementById('mainChart').getContext('2d'),{type:'line',data:{datasets:ds},options:mkOpts()});
   } else {
     myChart.data.datasets=ds;myChart.options=mkOpts();myChart.update('none');
   }
-  const t=LANG[S.lang];
   document.getElementById('zoomHint').textContent=t.zoomHint;
   document.getElementById('zoomReset').textContent=t.reset;
   renderSummary();
@@ -1153,6 +1210,11 @@ function renderChart(){
 
 function updateChartTitle(){
   const t=LANG[S.lang];
+  // Custom compressor: friendly title (no pressure curve to plot).
+  if(S.model === CUSTOM_MODEL){
+    document.getElementById('chartTitleTxt').textContent = t.customCompressor || 'Custom compressor';
+    return;
+  }
   const prs=isAtlantic(S.model)?pLabel(S.pressure):'';
   const tpl=t.chartTpl||'';
   const txt=tpl.replace('{model}',S.model).replace('{prs}',pLabel(S.pressure));
@@ -1166,9 +1228,11 @@ function resetZoom(){
 
 // ── FILTER LEGEND (cartridge) ─────────────────────────
 function buildFilterLeg(){
-  const md=isAtlantic(S.model)?null:TABLE[S.pressure][S.model];
   const t=LANG[S.lang];
   const el=document.getElementById('filterLeg');
+  // Custom compressor: nothing to filter, no curves to show.
+  if(S.model === CUSTOM_MODEL){ el.innerHTML=''; return; }
+  const md=isAtlantic(S.model)?null:TABLE[S.pressure][S.model];
   el.innerHTML=`<span class="fl-lbl">${t.filters}</span>`;
 
   if(isAtlantic(S.model)){
@@ -1203,6 +1267,8 @@ function buildFilterLeg(){
 function renderSummary(){
   const t=LANG[S.lang];const refC=20;
   const el=document.getElementById('sumRow');el.innerHTML='';
+  // Custom compressor: no summary cards to display.
+  if(S.model === CUSTOM_MODEL) return;
 
   if(isAtlantic(S.model)){
     const arr=ATL_TABLE[S.model][S.pressure];
@@ -1230,18 +1296,68 @@ function renderSummary(){
 
 // ── MODEL LIST ────────────────────────────────────────
 function buildModelList(){
+  const t = LANG[S.lang];
   const el=document.getElementById('modelList');el.innerHTML='';
+  function reRenderCurrentView(){
+    if(S.view==='cartridge'){buildFilterLeg();renderChart();}
+    else if(S.view==='filling') renderFillingTable();
+    else if(S.view==='cascade') renderCascade();
+    else if(S.view==='blends') renderBlends();
+  }
   MODELS.forEach(m=>{
     const b=document.createElement('button');
     b.className='model-btn'+(m===S.model?' active':'');
     b.textContent=m;
-    b.onclick=()=>{S.model=m;buildModelList();
-      if(S.view==='cartridge'){buildFilterLeg();renderChart();}
-      else if(S.view==='filling') renderFillingTable();
-      else if(S.view==='cascade') renderCascade();
-      else if(S.view==='blends') renderBlends();};
+    b.onclick=()=>{S.model=m;buildModelList();reRenderCurrentView();};
     el.appendChild(b);
   });
+  // Custom compressor button — always at the bottom of the list.
+  const cb=document.createElement('button');
+  cb.className='model-btn custom'+(S.model===CUSTOM_MODEL?' active':'');
+  cb.textContent=t.customCompressor||'Custom compressor';
+  cb.onclick=()=>{S.model=CUSTOM_MODEL;buildModelList();reRenderCurrentView();};
+  el.appendChild(cb);
+  // Show input panel when Custom is the active model.
+  if(S.model===CUSTOM_MODEL){
+    const panel=document.createElement('div');
+    panel.className='custom-flow-panel';
+    // Default unit by current measurement system (so Imperial users see CFM, Metric users L/min)
+    if(!S.customFlowUnit || (S.unit==='metric' && (S.customFlowUnit==='cfm'||S.customFlowUnit==='cfh')) || (S.unit==='imperial' && (S.customFlowUnit==='lmin'||S.customFlowUnit==='m3h'))){
+      S.customFlowUnit = S.unit==='metric' ? 'lmin' : 'cfm';
+    }
+    const units = S.unit==='metric' ? ['lmin','m3h'] : ['cfm','cfh'];
+    // Display value in the chosen unit (state stores L/min internally).
+    const displayVal = S.customFlow>0
+      ? (S.customFlow / FLOW_UNIT_TO_LMIN[S.customFlowUnit]).toFixed(S.customFlowUnit==='m3h'||S.customFlowUnit==='cfh'?2:0)
+      : '';
+    let optsHtml='';
+    units.forEach(u=>{ optsHtml += '<option value="'+u+'"'+(u===S.customFlowUnit?' selected':'')+'>'+FLOW_UNIT_LABEL[u]+'</option>'; });
+    panel.innerHTML = '<label>'+(t.customFlow||'Flow rate')+'</label>'
+      + '<div class="row">'
+      +   '<input type="number" id="customFlowInput" min="0" step="any" placeholder="0" value="'+displayVal+'">'
+      +   '<select id="customFlowUnitSel">'+optsHtml+'</select>'
+      + '</div>';
+    el.appendChild(panel);
+    const inp=panel.querySelector('#customFlowInput');
+    const sel=panel.querySelector('#customFlowUnitSel');
+    function applyCustom(){
+      const v=parseFloat(inp.value);
+      const unit=sel.value;
+      S.customFlowUnit=unit;
+      S.customFlow = (isFinite(v) && v>0) ? v * FLOW_UNIT_TO_LMIN[unit] : 0;
+      reRenderCurrentView();
+    }
+    inp.addEventListener('input',applyCustom);
+    sel.addEventListener('change',()=>{
+      // When unit changes, re-display the same L/min value in the new unit.
+      const newUnit=sel.value;
+      S.customFlowUnit=newUnit;
+      if(S.customFlow>0){
+        inp.value = (S.customFlow / FLOW_UNIT_TO_LMIN[newUnit]).toFixed(newUnit==='m3h'||newUnit==='cfh'?2:0);
+      }
+      reRenderCurrentView();
+    });
+  }
 }
 
 // ── PRESSURE ─────────────────────────────────────────
@@ -1283,6 +1399,7 @@ function setUnit(u){
   updatePrsLabels();
   if(myChart){myChart.destroy();myChart=null;isZoomed=false;document.getElementById('zoomReset').classList.remove('vis');}
   applyI18n();
+  buildModelList();
   if(S.view==='cartridge'){buildFilterLeg();renderChart();}
   else if(S.view==='filling') renderFillingTable();
   else if(S.view==='cascade') renderCascade();
@@ -1307,6 +1424,7 @@ function setLang(lang){
   document.querySelectorAll('.lang-item').forEach(i=>i.querySelector('.chk').textContent=i.dataset.lang===lang?'✓':'');
   document.getElementById('langDd').classList.remove('open');
   applyI18n();
+  buildModelList();
   if(S.view==='cartridge'){buildFilterLeg();renderChart();}
   else if(S.view==='filling') renderFillingTable();
   else if(S.view==='cascade') renderCascade();
@@ -1454,7 +1572,7 @@ function renderCascade(){
   var isImp = S.unit==='imperial';
   var pU = isImp?'PSI':'bar';
   var vU = isImp?'cu ft':'L';
-  var Q = FLOW_LMIN[S.model]||0;
+  var Q = modelFlow(S.model);
 
   var wrap = document.getElementById('cascWrap');
   wrap.innerHTML = '';
@@ -1954,10 +2072,6 @@ function renderCascade(){
           +     '<input type="number" id="blFinHe" min="0" max="100" step="0.1" value="'+BL.hef+'"></div>'
           + '</div>'
           + '<div class="bl-n2-tag">'+(t.blendsN2||'N₂ (calc.)')+': <b id="blFinN2">'+n2.toFixed(1)+'%</b></div>'
-          + '<div class="bl-mix-row" style="margin-top:8px">'
-          +   '<div class="bl-field" style="flex:1;min-width:120px"><label>'+(t.blendsMaxDepth||'Max depth')+' ('+dUnit+')</label>'
-          +     '<input type="number" id="blMaxD" min="0" step="1" value="'+depthVal+'"></div>'
-          + '</div>'
           + '<div id="blCustomMODs"></div>';
       } else {
         var endVal = metresToInput(BL.end);
@@ -2134,36 +2248,48 @@ function renderCascade(){
         }
       }
     } else {
-      // Custom mode: MOD table at ppO2 1.0 → 1.6, END, density
+      // Custom mode: MOD/END/Density table for ppO₂ from 0.6 → 1.6
       var modEl = document.getElementById('blCustomMODs');
       if(modEl){
         var fO2c = BL.o2f/100;
+        var fHec = BL.hef/100;
         if(fO2c > 0 && (BL.o2f + BL.hef) <= 100.001){
-          var ppList = [1.0,1.1,1.2,1.3,1.4,1.5,1.6];
+          var ppList = [0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6];
+          var fN2c = Math.max(0, 1 - fO2c - fHec);
           var rows = '';
           var decSep = (S.lang==='it'||S.lang==='fr'||S.lang==='es'||S.lang==='pt'||S.lang==='de') ? ',' : '.';
           ppList.forEach(function(pp){
             var modM = (pp/fO2c - 1) * 10; // metres
             if(modM < 0) modM = 0;
-            // No "ppO₂" prefix per row — header already says "ppO₂ (bar)"; just show the number.
-            rows += '<tr><td>'+pp.toFixed(1).replace('.',decSep)+'</td><td>'+fmtDepth(modM)+'</td></tr>';
-          });
-          var endTxt2 = '';
-          if(BL.maxDepth > 0){
-            var fN2c = Math.max(0, 1 - fO2c - BL.hef/100);
-            var Pabs = BL.maxDepth/10 + 1;
+            var Pabs = modM/10 + 1;
+            // EAD (Nitrox, no He) and END (Trimix) use the same numerical formula:
+            // equivalent depth at which air would have the same N₂ partial pressure.
             var endM = (Pabs * fN2c / 0.79 - 1) * 10;
             if(endM < 0) endM = 0;
-            // END as a compact mini-table styled like the MOD table but distinguishable (amber accent)
-            endTxt2 = '<div class="bl-mod-table bl-end-table" style="margin-top:8px"><table>'
-              + '<thead><tr><th>'+(t.blendsEND||'END')+' @ '+fmtDepth(BL.maxDepth)+'</th><th>'+fmtDepth(endM)+'</th></tr></thead>'
-              + '</table></div>';
-          }
+            var dens = mixDensity(Pabs, fO2c, fHec);
+            // Color thresholds use the displayed (rounded) values so 30 m and 5.20 g/L stay green.
+            var endRound = Math.round(endM);
+            var densRound = Math.round(dens*100)/100;
+            var endCls = (endRound > 30) ? 'bl-cell-end-warn' : 'bl-cell-end-ok';
+            var densCls = (densRound > 6.20) ? 'bl-cell-dens-danger' : ((densRound > 5.20) ? 'bl-cell-dens-warn' : 'bl-cell-dens-ok');
+            rows += '<tr>'
+                  + '<td>'+pp.toFixed(1).replace('.',decSep)+'</td>'
+                  + '<td>'+fmtDepth(modM)+'</td>'
+                  + '<td class="'+endCls+'">'+fmtDepth(endM)+'</td>'
+                  + '<td class="'+densCls+'">'+dens.toFixed(2).replace('.',decSep)+' g/L</td>'
+                  + '</tr>';
+          });
+          // Header: EAD when no helium (Nitrox), END when helium present (Trimix).
+          var endHdr = (fHec === 0) ? 'EAD' : 'END';
           modEl.innerHTML = '<div class="bl-mod-table"><table>'
-            + '<thead><tr><th>'+(t.blendsPpO2||'ppO₂')+' (bar)</th><th>'+(t.blendsMaxDepth||'MOD')+'</th></tr></thead>'
-            + '<tbody>'+rows+'</tbody></table></div>'
-            + endTxt2
-            + densHtml;
+            + '<colgroup><col class="bl-c-pp"><col class="bl-c-mod"><col class="bl-c-end"><col class="bl-c-dens"></colgroup>'
+            + '<thead><tr>'
+            +   '<th>'+(t.blendsPpO2||'ppO₂')+' (bar)</th>'
+            +   '<th>MOD</th>'
+            +   '<th>'+endHdr+'</th>'
+            +   '<th>'+(t.blendsDensityCol||'Density')+'</th>'
+            + '</tr></thead>'
+            + '<tbody>'+rows+'</tbody></table></div>';
         } else {
           modEl.innerHTML = '';
         }
@@ -2220,7 +2346,7 @@ function renderCascade(){
     var pAfterAir = P1 + y + x + z;
 
     // Compressor info for fill-time
-    var Q = FLOW_LMIN[S.model] || 0;
+    var Q = modelFlow(S.model);
     var fillT_PP = (Q>0 && z>0.01) ? fillTimeMin(Q, 0, z, BL.vol) : null; // air phase only
     var fillT_Stick = (Q>0 && (P2-P1)>0.01) ? fillTimeMin(Q, P1, P2, BL.vol) : null; // P1 → P2 entire
 
