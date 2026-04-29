@@ -402,8 +402,8 @@ header{height:var(--hh);background:#fff;border-bottom:3px solid var(--blue);disp
 .bl-section-hdr{font-size:14px;font-weight:900;letter-spacing:1.5px;color:var(--blue);text-transform:uppercase;padding-bottom:10px;margin-bottom:14px;border-bottom:4px solid var(--blue);}
 .bl-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px;}
 .bl-row:last-child{margin-bottom:0;}
-.bl-row-mix{align-items:stretch;}
-.bl-row-mix > .bl-mix-grp{flex:1 1 0;display:flex;flex-direction:column;}
+.bl-row-mix{align-items:stretch;flex-direction:column;flex-wrap:nowrap;gap:10px;}
+.bl-row-mix > .bl-mix-grp{flex:0 0 auto;width:100%;display:flex;flex-direction:column;min-width:0;}
 .bl-fill-time{font-size:12.5px !important;color:var(--blue) !important;font-weight:800 !important;display:block;margin-top:5px;line-height:1.35;}
 .bl-field{display:flex;flex-direction:column;gap:4px;min-width:120px;flex:1;}
 .bl-field label{font-size:10px;font-weight:700;color:var(--mut);letter-spacing:.3px;text-transform:uppercase;}
