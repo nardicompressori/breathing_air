@@ -1392,9 +1392,11 @@ function setUnit(u){
       BL.pFin=__ratedPsi/14.504;
     }
   }
-  // Restore Blends final pressure to the standard 200 bar working pressure when switching to Metric (BUG-02 round-3 fix)
+  // Restore Blends final pressure to the cylinder's NOMINAL bar when switching to Metric.
+  // Round-13 fix (QA Cycle 3 BUG-02b): instead of always 200 bar, use the cylinder-specific
+  // nominal (AL=200, HP=237, LP=182) so the user sees a clean rounded value.
   if(u==='metric' && typeof BL!=='undefined' && BL){
-    BL.pFin = 200;
+    BL.pFin = (typeof blNominalBar==='function') ? blNominalBar(BL.cylKey) : 200;
   }
   updatePrsLabels();
   if(myChart){myChart.destroy();myChart=null;isZoomed=false;document.getElementById('zoomReset').classList.remove('vis');}
@@ -1842,19 +1844,26 @@ function renderCascade(){
   // ══════════════════════════════════════════════════════════════
 
   // Cylinder presets (imperial dropdown) – key: label|cuFt|ratedPSI
+  // `b` = nominal working pressure in bar (NOT the exact psi/14.504 conversion).
+  // AL @ 3000 psi → 200 bar (nominal), HP @ 3442 psi → 237 bar, LP @ 2640 psi → 182 bar.
+  // Used when switching from Imperial back to Metric so blPfin shows a clean rounded value.
   var BL_CYLS = [
-    {k:'AL40|40.0|3000',  l:'AL40 – 40.0 cu ft @ 3000 psi'},
-    {k:'AL50|50.0|3000',  l:'AL50 – 50.0 cu ft @ 3000 psi'},
-    {k:'AL63|63.0|3000',  l:'AL63 – 63.0 cu ft @ 3000 psi'},
-    {k:'AL72|72.0|3000',  l:'AL72 – 72.0 cu ft @ 3000 psi'},
-    {k:'AL80|77.4|3000',  l:'AL80 – 77.4 cu ft @ 3000 psi'},
-    {k:'HP80|80.0|3442',  l:'HP80 – 80.0 cu ft @ 3442 psi'},
-    {k:'HP100|100.0|3442',l:'HP100 – 100.0 cu ft @ 3442 psi'},
-    {k:'HP119|119.0|3442',l:'HP119 – 119.0 cu ft @ 3442 psi'},
-    {k:'LP85|85.0|2640',  l:'LP85 – 85.0 cu ft @ 2640 psi'},
-    {k:'LP95|95.0|2640',  l:'LP95 – 95.0 cu ft @ 2640 psi'},
-    {k:'LP104|104.0|2640',l:'LP104 – 104.0 cu ft @ 2640 psi'}
+    {k:'AL40|40.0|3000',  l:'AL40 – 40.0 cu ft @ 3000 psi',  b:200},
+    {k:'AL50|50.0|3000',  l:'AL50 – 50.0 cu ft @ 3000 psi',  b:200},
+    {k:'AL63|63.0|3000',  l:'AL63 – 63.0 cu ft @ 3000 psi',  b:200},
+    {k:'AL72|72.0|3000',  l:'AL72 – 72.0 cu ft @ 3000 psi',  b:200},
+    {k:'AL80|77.4|3000',  l:'AL80 – 77.4 cu ft @ 3000 psi',  b:200},
+    {k:'HP80|80.0|3442',  l:'HP80 – 80.0 cu ft @ 3442 psi',  b:237},
+    {k:'HP100|100.0|3442',l:'HP100 – 100.0 cu ft @ 3442 psi',b:237},
+    {k:'HP119|119.0|3442',l:'HP119 – 119.0 cu ft @ 3442 psi',b:237},
+    {k:'LP85|85.0|2640',  l:'LP85 – 85.0 cu ft @ 2640 psi',  b:182},
+    {k:'LP95|95.0|2640',  l:'LP95 – 95.0 cu ft @ 2640 psi',  b:182},
+    {k:'LP104|104.0|2640',l:'LP104 – 104.0 cu ft @ 2640 psi',b:182}
   ];
+  function blNominalBar(cylKey){
+    for(var i=0;i<BL_CYLS.length;i++){ if(BL_CYLS[i].k===cylKey) return BL_CYLS[i].b; }
+    return 200;
+  }
 
   // Convert cu ft of air at rated psi → litres of HYDRAULIC (water) volume
   function cuftToHydL(cuft, ratedPsi){
